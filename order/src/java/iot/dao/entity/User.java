@@ -41,8 +41,15 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "login_id")
     private Integer loginId;
-    
-     @Column(name = "status")
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    @Column(name = "status")
     private String status;
 
     public User() {
