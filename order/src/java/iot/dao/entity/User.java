@@ -41,6 +41,9 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "login_id")
     private Integer loginId;
+    
+     @Column(name = "status")
+    private String status;
 
     public User() {
     }

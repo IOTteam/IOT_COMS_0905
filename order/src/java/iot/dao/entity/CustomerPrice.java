@@ -7,7 +7,6 @@ package iot.dao.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,15 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CustomerPrice.findAll", query = "SELECT c FROM CustomerPrice c"),
-    @NamedQuery(name = "CustomerPrice.findByRange", query = "SELECT c FROM CustomerPrice c WHERE c.range = :range"),
+    @NamedQuery(name = "CustomerPrice.findByRanges", query = "SELECT c FROM CustomerPrice c WHERE c.ranges = :ranges"),
     @NamedQuery(name = "CustomerPrice.findByRangePrice", query = "SELECT c FROM CustomerPrice c WHERE c.rangePrice = :rangePrice"),
-    @NamedQuery(name = "CustomerPrice.findByCustomerPriceId", query = "SELECT c FROM CustomerPrice c WHERE c.customerPriceId = :customerPriceId")})
+    @NamedQuery(name = "CustomerPrice.findByCustomerPriceId", query = "SELECT c FROM CustomerPrice c WHERE c.customerPriceId = :customerPriceId"),
+    @NamedQuery(name = "CustomerPrice.findByStatus", query = "SELECT c FROM CustomerPrice c WHERE c.status = :status")})
 public class CustomerPrice implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "ranges")
-    private int range;
+    private int ranges;
     @Basic(optional = false)
     @Column(name = "range_price")
     private float rangePrice;
@@ -46,11 +46,13 @@ public class CustomerPrice implements Serializable {
     @Basic(optional = false)
     @Column(name = "customer_price_id")
     private Integer customerPriceId;
+    @Column(name = "status")
+    private String status;
     @JoinColumn(name = "customer_master_id", referencedColumnName = "customer_master_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private CustomerMaster customerMasterId;
     @JoinColumn(name = "product_master_id", referencedColumnName = "product_master_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private ProductMaster productMasterId;
 
     public CustomerPrice() {
@@ -60,18 +62,18 @@ public class CustomerPrice implements Serializable {
         this.customerPriceId = customerPriceId;
     }
 
-    public CustomerPrice(Integer customerPriceId, int range, float rangePrice) {
+    public CustomerPrice(Integer customerPriceId, int ranges, float rangePrice) {
         this.customerPriceId = customerPriceId;
-        this.range = range;
+        this.ranges = ranges;
         this.rangePrice = rangePrice;
     }
 
-    public int getRange() {
-        return range;
+    public int getRanges() {
+        return ranges;
     }
 
-    public void setRange(int range) {
-        this.range = range;
+    public void setRanges(int ranges) {
+        this.ranges = ranges;
     }
 
     public float getRangePrice() {
@@ -88,6 +90,14 @@ public class CustomerPrice implements Serializable {
 
     public void setCustomerPriceId(Integer customerPriceId) {
         this.customerPriceId = customerPriceId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public CustomerMaster getCustomerMasterId() {

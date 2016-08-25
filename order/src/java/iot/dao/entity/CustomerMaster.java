@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CustomerMaster.findByCustomerName", query = "SELECT c FROM CustomerMaster c WHERE c.customerName = :customerName"),
     @NamedQuery(name = "CustomerMaster.findByCustomerMail", query = "SELECT c FROM CustomerMaster c WHERE c.customerMail = :customerMail"),
     @NamedQuery(name = "CustomerMaster.findByCustomerPhone", query = "SELECT c FROM CustomerMaster c WHERE c.customerPhone = :customerPhone"),
-    @NamedQuery(name = "CustomerMaster.findByCustomerMasterId", query = "SELECT c FROM CustomerMaster c WHERE c.customerMasterId = :customerMasterId")})
+    @NamedQuery(name = "CustomerMaster.findByCustomerMasterId", query = "SELECT c FROM CustomerMaster c WHERE c.customerMasterId = :customerMasterId"),
+    @NamedQuery(name = "CustomerMaster.findByStatus", query = "SELECT c FROM CustomerMaster c WHERE c.status = :status")})
 public class CustomerMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,9 +52,12 @@ public class CustomerMaster implements Serializable {
     @Column(name = "customer_phone")
     private String customerPhone;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "customer_master_id")
     private Integer customerMasterId;
+    @Column(name = "status")
+    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerMasterId")
     private Collection<CustomerPrice> customerPriceCollection;
 
@@ -108,6 +114,14 @@ public class CustomerMaster implements Serializable {
 
     public void setCustomerMasterId(Integer customerMasterId) {
         this.customerMasterId = customerMasterId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @XmlTransient

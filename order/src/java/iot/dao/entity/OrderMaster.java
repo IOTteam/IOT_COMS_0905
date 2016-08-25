@@ -12,8 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "OrderMaster.findByOrderId", query = "SELECT o FROM OrderMaster o WHERE o.orderId = :orderId"),
     @NamedQuery(name = "OrderMaster.findByOrderDate", query = "SELECT o FROM OrderMaster o WHERE o.orderDate = :orderDate"),
     @NamedQuery(name = "OrderMaster.findByCustomerId", query = "SELECT o FROM OrderMaster o WHERE o.customerId = :customerId"),
-    @NamedQuery(name = "OrderMaster.findByOrderMasterId", query = "SELECT o FROM OrderMaster o WHERE o.orderMasterId = :orderMasterId")})
+    @NamedQuery(name = "OrderMaster.findByOrderMasterId", query = "SELECT o FROM OrderMaster o WHERE o.orderMasterId = :orderMasterId"),
+    @NamedQuery(name = "OrderMaster.findByStatus", query = "SELECT o FROM OrderMaster o WHERE o.status = :status")})
 public class OrderMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,10 +50,11 @@ public class OrderMaster implements Serializable {
     @Column(name = "customer_id")
     private String customerId;
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "order_master_id")
     private Integer orderMasterId;
+    @Column(name = "status")
+    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderMasterId")
     private Collection<OrderDetail> orderDetailCollection;
 
@@ -102,6 +102,14 @@ public class OrderMaster implements Serializable {
 
     public void setOrderMasterId(Integer orderMasterId) {
         this.orderMasterId = orderMasterId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @XmlTransient

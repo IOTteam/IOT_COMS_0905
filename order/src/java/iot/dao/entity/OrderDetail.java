@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderDetail.findAll", query = "SELECT o FROM OrderDetail o"),
     @NamedQuery(name = "OrderDetail.findByOrderQty", query = "SELECT o FROM OrderDetail o WHERE o.orderQty = :orderQty"),
     @NamedQuery(name = "OrderDetail.findByOrderPrice", query = "SELECT o FROM OrderDetail o WHERE o.orderPrice = :orderPrice"),
-    @NamedQuery(name = "OrderDetail.findByOrderDetailId", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailId = :orderDetailId")})
+    @NamedQuery(name = "OrderDetail.findByOrderDetailId", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailId = :orderDetailId"),
+    @NamedQuery(name = "OrderDetail.findByStatus", query = "SELECT o FROM OrderDetail o WHERE o.status = :status")})
 public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,6 +46,8 @@ public class OrderDetail implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
+    @Column(name = "status")
+    private String status;
     @JoinColumn(name = "order_master_id", referencedColumnName = "order_master_id")
     @ManyToOne(optional = false)
     private OrderMaster orderMasterId;
@@ -87,6 +90,14 @@ public class OrderDetail implements Serializable {
 
     public void setOrderDetailId(Integer orderDetailId) {
         this.orderDetailId = orderDetailId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public OrderMaster getOrderMasterId() {

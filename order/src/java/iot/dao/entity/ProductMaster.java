@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductMaster.findByProductName", query = "SELECT p FROM ProductMaster p WHERE p.productName = :productName"),
     @NamedQuery(name = "ProductMaster.findByProductSpec", query = "SELECT p FROM ProductMaster p WHERE p.productSpec = :productSpec"),
     @NamedQuery(name = "ProductMaster.findByProductPrice", query = "SELECT p FROM ProductMaster p WHERE p.productPrice = :productPrice"),
-    @NamedQuery(name = "ProductMaster.findByProductMasterId", query = "SELECT p FROM ProductMaster p WHERE p.productMasterId = :productMasterId")})
+    @NamedQuery(name = "ProductMaster.findByProductMasterId", query = "SELECT p FROM ProductMaster p WHERE p.productMasterId = :productMasterId"),
+    @NamedQuery(name = "ProductMaster.findByStatus", query = "SELECT p FROM ProductMaster p WHERE p.status = :status")})
 public class ProductMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,11 +48,13 @@ public class ProductMaster implements Serializable {
     private String productSpec;
     @Basic(optional = false)
     @Column(name = "product_price")
-    private double productPrice;
+    private float productPrice;
     @Id
     @Basic(optional = false)
     @Column(name = "product_master_id")
     private Integer productMasterId;
+    @Column(name = "status")
+    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productMasterId")
     private Collection<CustomerPrice> customerPriceCollection;
     @OneToMany(mappedBy = "productId")
@@ -64,7 +67,7 @@ public class ProductMaster implements Serializable {
         this.productMasterId = productMasterId;
     }
 
-    public ProductMaster(Integer productMasterId, String productId, String productName, String productSpec, double productPrice) {
+    public ProductMaster(Integer productMasterId, String productId, String productName, String productSpec, float productPrice) {
         this.productMasterId = productMasterId;
         this.productId = productId;
         this.productName = productName;
@@ -96,11 +99,11 @@ public class ProductMaster implements Serializable {
         this.productSpec = productSpec;
     }
 
-    public double getProductPrice() {
+    public float getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(double productPrice) {
+    public void setProductPrice(float productPrice) {
         this.productPrice = productPrice;
     }
 
@@ -110,6 +113,14 @@ public class ProductMaster implements Serializable {
 
     public void setProductMasterId(Integer productMasterId) {
         this.productMasterId = productMasterId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @XmlTransient
