@@ -6,19 +6,18 @@
 package iot.controller;
 
 import iot.dao.entity.CustomerMaster;
-import iot.dao.entity.CustomerPrice;
 import iot.dao.entity.CustomerPriceInfo;
 import iot.dao.entity.Product;
 import iot.dao.entity.ProductMaster;
 import iot.dao.repository.CustomerMasterDAO;
 import iot.dao.repository.ProductMasterDAO;
+import iot.service.CustomerService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +33,9 @@ public class customerMasterController {
     
     @Autowired
     private EntityManagerFactory emf;
+    
+    @Autowired
+    private CustomerService customerService;
     
     @RequestMapping(value = "CustQuery",method = RequestMethod.GET)//前端传来的请求类型为GET,若是该类型的请求有2个，则需要设置value值以区分
     public String customerQueryString(ModelMap modelMap){//modelmap用以存储controller执行相关操作的结果
@@ -78,24 +80,7 @@ public class customerMasterController {
         
     }
     
-    @RequestMapping(value = "CustAdd",method = RequestMethod.POST)
-    public String customerAdd(@RequestParam("customerId") String customerId,@RequestParam("customerName") String customerName,
-            @RequestParam("customerMail") String customerMail,@RequestParam("customerPhone") String customerPhone,ModelMap model) throws Exception{
-         
-        CustomerMasterDAO cmdao = new CustomerMasterDAO(emf);
-        CustomerMaster cmNew = new CustomerMaster();
-        cmNew.setCustomerId(customerId);
-        cmNew.setCustomerMail(customerMail);
-        cmNew.setCustomerName(customerName);
-        cmNew.setCustomerPhone(customerPhone);
-        cmNew.setCustomerMasterId(Integer.parseInt(customerId));
-        cmdao.create(cmNew);
-
-        return "redirect:/CustInfo/CustQuery";
-        
-    }
-    
-    
+    //获取产品标准单价
     @RequestMapping(value = "getProductPrice",method = RequestMethod.GET)
     @ResponseBody
     public Product getProductPrice(@RequestParam("productId") String productId ,ModelMap model){
@@ -118,6 +103,7 @@ public class customerMasterController {
     
     private List<CustomerPriceInfo> customerPriceInfos = new ArrayList<CustomerPriceInfo>();
     
+    //保存客户单价信息
     @RequestMapping(value = "setCusProPrice",method = RequestMethod.POST)
     @ResponseBody
     public List<CustomerPriceInfo> setCusProPrice(@RequestParam("customerId") String customerId,@RequestParam("productId") String productId,
@@ -134,6 +120,17 @@ public class customerMasterController {
         customerPriceInfos.add(customerPriceInfo);
         
         return customerPriceInfos;
+        
+    }
+    
+        
+    @RequestMapping(value = "CustAdd",method = RequestMethod.POST)
+    public String customerAdd(@RequestParam("customerId") String customerId,@RequestParam("customerName") String customerName,
+            @RequestParam("customerMail") String customerMail,@RequestParam("customerPhone") String customerPhone,ModelMap model) throws Exception{
+         
+       customerService.addCustomerAndPrice(customerId, customerMail, customerName, customerPhone,customerPriceInfos);
+
+        return "redirect:/CustInfo/CustQuery";
         
     }
     

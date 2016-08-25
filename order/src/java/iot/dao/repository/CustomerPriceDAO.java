@@ -127,7 +127,7 @@ public class CustomerPriceDAO implements Serializable {
     public CustomerPrice findCustomerPriceByCustProdRange(CustomerMaster customerMasterId,ProductMaster productMasterId,int orderQty) {
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT c FROM CustomerPrice c WHERE c.customerMasterId = :customerMasterId and c.productMasterId = :productMasterId AND c.range <:orderQty order by c.range DESC ");
+            Query query = em.createQuery("SELECT c FROM CustomerPrice c WHERE c.customerMasterId = :customerMasterId and c.productMasterId = :productMasterId AND c.ranges <:orderQty order by c.ranges DESC ");
             //查询结果以range为准降序排列
             query.setParameter("customerMasterId", customerMasterId);//赋值
             query.setParameter("productMasterId", productMasterId);//赋值
