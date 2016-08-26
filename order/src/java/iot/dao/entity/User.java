@@ -27,6 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.getUser", query = "SELECT l FROM User l WHERE l.userId = :userId")})
 public class User implements Serializable {
 
+    @Column(name = "status")
+    private Boolean status;
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "user_id")
@@ -42,15 +45,6 @@ public class User implements Serializable {
     @Column(name = "login_id")
     private Integer loginId;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    @Column(name = "status")
-    private String status;
 
     public User() {
     }
@@ -121,6 +115,14 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "iot.dao.entity.User[ loginId=" + loginId + " ]";
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
     
 }

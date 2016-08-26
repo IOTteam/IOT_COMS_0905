@@ -1,3 +1,9 @@
+<%-- 
+    Document   : custEdit
+    Created on : 2016-8-26, 9:14:49
+    Author     : hatanococoro
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -29,54 +35,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>客户信息</title>
-<meta name="keywords" content="表格">
-
-  <script type="text/javascript">
-            function getOrderList(){
-                window.location = "<%=basePath%>order/orderList";
-
-            }
-        </script>
-        
+<title>修改客户信息</title>       
 </head>
 <body>
 <section class="container">
-    
-    <header class="navbar-wrapper">
-	<div class="navbar navbar-fixed-top ">
-		<div class="container cl">
-			<a class="logo navbar-logo f-l mr-10 hidden-xs f-26">客户订单管理系统</a>
-			<nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
-				<ul class="cl">
-					<li class="current"><a href="<%=basePath%>CustInfo/CustQuery">客户信息</a></li>
-					<li><a href="<%=basePath%>orderList/queryList">订单列表</a></li>
-					<li><a href="#">商品信息</a></li>
-					<li><a href="<%=basePath%>CustPrice/queryCustPrice">客户产品单价</a></li>
-				</ul>
-			</nav>
-                                            
-        	<ul class="Hui-userbar text-r">
-		<li class="dropDown dropDown_hover"><a href="#" class="c-red" >${user.userName},欢迎登陆</a>
-			<ul class="dropDown-menu radius box-shadow">
-				<li><a href="<%=basePath%>login/userInfo">个人信息</a></li>
-                                <li><a href="<%=basePath%>login/editPassword">修改密码</a></li>
-				<li><a href="<%=basePath%>/login">退出</a></li>
-			</ul>
-		</li>
-                </ul>
+        
+        <form action="CustEdit" method="post">
+		<h3 align="center">修改客户信息</h3>
+                <div class="formControls col-xs-5">
+                客户编码：<input type="text" name="customerId" readonly="true" id="customerId"  value="${customer.customerId}" class="input-text radius"  />
 		</div>
-	</div>
-</header>
-                                        
-    <footer class="footer mt-20">
-	<div class="container">
-
-		<p>IOT六人小分队 <br></p>
-	</div>
-</footer>        
+                <div class="formControls col-xs-5">
+               客户名称：<input type="text" name="customerName" value="${customer.customerName}"  class="input-text radius" />
+		</div>
+                <div class="formControls col-xs-5">
+                客户邮箱：<input type="text" name="customerMail" value="${customer.customerMail}" class="input-text radius" />
+		</div>
+                <div class="formControls col-xs-5">
+                客户电话：<input type="text" name="customerPhone"  value="${customer.customerPhone}" class="input-text radius" />
+		</div>
+                <div class="formControls col-xs-5">
+                <input type="submit" value="修改" class="btn btn-primary radius" />
+		</div>
+	
 </section>
 
+<script type="text/javascript" src="<%=basePath%>pages/lib/jquery/jquery-3.1.0.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/layer/2.1/layer.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/laypage/1.2/laypage.js"></script> 
@@ -87,6 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
+            
 
 </script>
 </body>

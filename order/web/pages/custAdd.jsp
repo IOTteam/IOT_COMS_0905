@@ -3,17 +3,6 @@
     Created on : 2016-8-17, 10:56:05
     Author     : hatanococoro
 --%>
-
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        
-                       
-    </body>
-</html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -45,9 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>新增客户信息</title>
-<meta name="keywords" content="表格">
-        
+<title>新增客户信息</title>       
 </head>
 <body>
 <section class="container">
@@ -152,6 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 data : {productId:""+ value +""},  
                 success : function(data, stats) {  
                     if (stats === "success") {  
+                        console.dir(data);
                       $("#productPrice")[0].value = data.productPrice;
                     }  
                 },  

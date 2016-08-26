@@ -1,7 +1,7 @@
 <%-- 
-    Document   : CustInfo
-    Created on : 2016-8-10, 15:04:43
-    Author     : lxp
+    Document   : custPriceInfo
+    Created on : 2016-8-26, 13:44:02
+    Author     : hatanococoro
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -34,43 +34,54 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>订单头档</title>
-<meta name="keywords" content="订单头档">
+<title>客户产品单价信息</title>
+        
 </head>
-
 <body>
 <section class="container">
-    
+
         <div class="">
-            <form action="orderQuery" method="post">
-		<h3 align="center">订单信息列表</h3>
-		    <p>订单编码：<input type="text" name="customerId" class="input-text radius" style="width:100px" />
-                       下单日期：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
-                       <input class="btn btn-primary radius"  type="submit" value="查询"/>
-                       <input class="btn btn-primary radius" type="button" value="新增" onclick="add()"/>
-                    </p>
+            <form action="CustQuery" method="post">
+                <h3 align="center">客户产品单价信息列表</h3>
+                <p>客户编码：<input type="text" name="customerId" class="input-text radius" style="width:100px" />
+                   客户名称：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
+                   产品编码：<input type="text" name="ProductId" class="input-text radius" style="width:100px" />
+                   产品名称：<input type="text" name="Product" class="input-text radius" style="width:100px" />
+
+                    <input class="btn btn-primary radius"  type="submit" value="查询"/>
+                </p>
             </form>
         </div>
-    
-    
-        <table  class="table table-border table-bordered table-striped" >
-		<tr>
-		<th style="width:100px">订单编码</th> <th style="width:100px">下单日期</th>  <th style="width:100px">下单客户</th> <th style="width:100px">操作</th> 
-		</tr>
-                <c:forEach items="${orderList}" var ="order">
-                    <tr onclick="">
-                    <td style="width:100px"><c:out value="${order.orderId}"></c:out></td>
-                    <td style="width:100px"><c:out value="${order.orderDate}"></c:out></td> 
-                    <td style="width:100px"><c:out value="${order.customerName}"></c:out></td>
-                    <td>
-                     <input class="btn btn-primary radius"  type="button" value="详细"/>                   
-                    <input class="btn btn-primary radius"  type="button" value="删除"/>
-                    </td>
-                    
-                </tr>
-                 </c:forEach> 
-        </table>
    
+    <table  class="table table-border table-bordered table-striped" >
+            <tr>
+                <th style="width:100px">客户编号</th>  <th style="width:100px">客户姓名</th> 
+                <th style="width:100px">产品编号</th>  <th style="width:100px">产品名称</th>   
+                <th style="width:100px">数量级</th>    <th style="width:100px">价格</th>
+                <th style="width:100px">修改</th> 
+            </tr>
+            <c:forEach items="${custPriceList}" var ="custPrice">
+                <tr>
+                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerId}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerName}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productId}"></c:out></td> 
+                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productName}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.ranges}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.rangePrice}"></c:out></td>
+                    <td>
+                    <input class="btn btn-primary radius" type="submit" value="修改" onclick="update()"/>
+                    </td>
+                    </tr>
+            </c:forEach> 
+        </table>
+    
+    <div align="right">
+        <p> <input class="btn btn-primary radius" type="button" value="上一页" onclick="pre()"/>
+            ${index}
+         <input class="btn btn-primary radius" type="button" value="下一页" onclick="next()"/></p>
+    </div>
+    
+    
 </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -83,13 +94,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
-
-    function add(){
-                window.location = "<%=basePath%>orderList/orderAdd";
-
-            }
-            
-    $("tr").click(function(){
+    
+        $("tr").click(function(){
 
 
         var str = [];
@@ -100,14 +106,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            str[num] = txt;
            num++;
            });
-           
-           
-        window.location = "<%=basePath%>orderList/detailQuery?orderId="+str[0]+"";
-           
-        console.dir(str);
-       
-      });
+
+        //window.location = "<%=basePath%>CustPrice/CustEdit?customerId="+str[0]+"";
+    });
     
+    function next(){
+        
+        window.location = "<%=basePath%>CustPrice/queryNext";
+
+    }
+    
+    function pre(){
+        
+        window.location = "<%=basePath%>CustPrice/queryPre";
+
+    }
+         
 </script>
 </body>
 </html>

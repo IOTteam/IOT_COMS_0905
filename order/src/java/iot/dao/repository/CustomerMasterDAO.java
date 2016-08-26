@@ -145,25 +145,33 @@ public class CustomerMasterDAO implements Serializable {
         //此函数实现按name、ID、name+ID3种方式查询customer，实现逻辑为当name为空时使用ID查询，ID为空时使用Name查询，若都不为空则利用2个参数一起查询
        EntityManager em = getEntityManager();//创建实体管理
        try{
-           if (customerId.length()==0) {
-               Query queryByName ;//创建一个查询
-               queryByName = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerName = :customerName");//拼接查询语句
-               queryByName.setParameter("customerName", customerName);//将参数赋值给查询语句中的customerName
-               return queryByName.getResultList();//返回查询结果，结果存在一个list中
+           
+           String sql = "SELECT c FROM CustomerMaster c WHERE 1=1 and c.status = :flag";
+           
+           if(customerId.length() > 0){
+           
+               sql = sql + " and c.customerId = :customerId ";
            }
-           else if (customerName.length()==0) {
-               Query queryById ;
-               queryById = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId");
-               queryById.setParameter("customerId", customerId);
-               return queryById.getResultList();
+           
+           if(customerName.length() > 0){
+           
+               sql = sql + " and c.customerName LIKE :customerName ";
            }
-           else{
-                Query queryByIdName ;
-                queryByIdName = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId and c.customerName = :customerName");
-                queryByIdName.setParameter("customerId", customerId);
-                queryByIdName.setParameter("customerName", customerName);
-                return queryByIdName.getResultList();
+           
+           Query query = em.createQuery(sql);
+           
+           if(customerId.length() > 0){
+           
+                query.setParameter("customerId", customerId);
            }
+           
+           if(customerName.length() > 0){
+           
+                query.setParameter("customerName", "%" + customerName+ "%");
+           }
+           query.setParameter("flag", true);
+           return query.getResultList();
+
        }finally{
            em.close();//关闭实体管理
        }
@@ -174,10 +182,24 @@ public class CustomerMasterDAO implements Serializable {
        EntityManager em = getEntityManager();//创建实体管理
        try{
 
-               Query queryById ;
-               queryById = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId");
-               queryById.setParameter("customerId", customerId);
-               return (CustomerMaster)queryById.getSingleResult();
+            Query query = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId and c.status = :flag");
+            query.setParameter("customerId", customerId);
+            query.setParameter("flag", true);
+            return (CustomerMaster)query.getSingleResult();
+
+       }finally{
+           em.close();//关闭实体管理
+       }
+    }
+    
+    public List<CustomerMaster> findAllCustomerMaster(){
+      
+       EntityManager em = getEntityManager();//创建实体管理
+       try{
+
+            Query query = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.status = :flag");
+            query.setParameter("flag", true);
+            return query.getResultList();
 
        }finally{
            em.close();//关闭实体管理
