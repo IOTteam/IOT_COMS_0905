@@ -10,6 +10,7 @@ import iot.dao.repository.UserDAO;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -49,31 +50,28 @@ public class UserDaoImpl implements UserDAO{
    }
     
     @Override
-    public User getUserByname(String username,String password){
+    public User getUserByNameAndPassword(String username,String password){
+        
+        emf = Persistence.createEntityManagerFactory("orderPU");
+        EntityManager em = emf.createEntityManager();  
         
         try {
             
-        emf = Persistence.createEntityManagerFactory("orderPU");
-        EntityManager em = emf.createEntityManager();        
         Query query = em.createQuery("SELECT u FROM User u where u.userName=:username and u.password=:password");
         query.setParameter("username", username);
         query.setParameter("password", password);
         User user =(User)query.getSingleResult();
-        em.close();
-        
         return user;
             
-        } catch (Exception e) {
-            e.printStackTrace();
-            
+        } catch (NoResultException e) {
+           return null;
+        }finally{
+            em.close();
         }
         
-        User u = new User();
-        u.setUserName("");
-        u.setPassword("");
-        return u;
-        
     }
+    
+
     
     @Override
     public void addUser(User user){

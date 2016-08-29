@@ -191,6 +191,18 @@ public class ProductMasterDAO implements Serializable {
             em.close();
         }
     }
+    
+    public List<ProductMaster> findProductMasterByProductName(String ProductName){
+        EntityManager em=getEntityManager();
+        try {
+            Query query=em.createQuery("SELECT p FROM ProductMaster p WHERE p.productName LIKE :ProductName AND p.status=:flag");
+            query.setParameter("ProductName", "%"+ProductName+"%");
+            query.setParameter("flag", true);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
     public int getProductMasterCount() {
         EntityManager em = getEntityManager();

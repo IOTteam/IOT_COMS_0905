@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CustomerPrice.findByStatus", query = "SELECT c FROM CustomerPrice c WHERE c.status = :status")})
 public class CustomerPrice implements Serializable {
 
+    @Column(name = "status")
+    private Boolean status;
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "ranges")
@@ -46,8 +49,6 @@ public class CustomerPrice implements Serializable {
     @Basic(optional = false)
     @Column(name = "customer_price_id")
     private Integer customerPriceId;
-    @Column(name = "status")
-    private String status;
     @JoinColumn(name = "customer_master_id", referencedColumnName = "customer_master_id")
     @ManyToOne(optional = false)
     private CustomerMaster customerMasterId;
@@ -92,13 +93,6 @@ public class CustomerPrice implements Serializable {
         this.customerPriceId = customerPriceId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public CustomerMaster getCustomerMasterId() {
         return customerMasterId;
@@ -139,6 +133,14 @@ public class CustomerPrice implements Serializable {
     @Override
     public String toString() {
         return "iot.dao.entity.CustomerPrice[ customerPriceId=" + customerPriceId + " ]";
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
     
 }

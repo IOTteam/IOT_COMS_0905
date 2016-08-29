@@ -38,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "OrderMaster.findByStatus", query = "SELECT o FROM OrderMaster o WHERE o.status = :status")})
 public class OrderMaster implements Serializable {
 
+    @Column(name = "status")
+    private Boolean status;
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "order_id")
@@ -53,8 +56,6 @@ public class OrderMaster implements Serializable {
     @Basic(optional = false)
     @Column(name = "order_master_id")
     private Integer orderMasterId;
-    @Column(name = "status")
-    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderMasterId")
     private Collection<OrderDetail> orderDetailCollection;
 
@@ -104,13 +105,6 @@ public class OrderMaster implements Serializable {
         this.orderMasterId = orderMasterId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @XmlTransient
     public Collection<OrderDetail> getOrderDetailCollection() {
@@ -144,6 +138,14 @@ public class OrderMaster implements Serializable {
     @Override
     public String toString() {
         return "iot.dao.entity.OrderMaster[ orderMasterId=" + orderMasterId + " ]";
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
     
 }

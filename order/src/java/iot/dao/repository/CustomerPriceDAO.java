@@ -123,21 +123,78 @@ public class CustomerPriceDAO implements Serializable {
             em.close();
         }
     }
-    
-    public CustomerPrice findCustomerPriceByCustProdRange(CustomerMaster customerMasterId,ProductMaster productMasterId,int orderQty) {
+
+    public CustomerPrice findCustomerPriceByCustProdRange(CustomerMaster customerMasterId, ProductMaster productMasterId, int orderQty) {
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createQuery("SELECT c FROM CustomerPrice c WHERE c.customerMasterId = :customerMasterId and c.productMasterId = :productMasterId AND c.range <:orderQty order by c.range DESC ");
+            Query query = em.createQuery("SELECT c FROM CustomerPrice c WHERE c.customerMasterId = :customerMasterId and c.productMasterId = :productMasterId AND c.ranges <:orderQty order by c.ranges DESC ");
             //查询结果以range为准降序排列
             query.setParameter("customerMasterId", customerMasterId);//赋值
             query.setParameter("productMasterId", productMasterId);//赋值
             query.setParameter("orderQty", orderQty);//赋值
-            return (CustomerPrice)query.getResultList().get(0);//查询结果取第一个结果
+            return (CustomerPrice) query.getResultList().get(0);//查询结果取第一个结果
         } finally {
             em.close();
         }
     }
 
+    public List<CustomerPrice> findCustomerPriceAllCondition(CustomerMaster customerMasterName, ProductMaster productMasterName, String PriceMin, String PriceMax, String RangesMin, String RangesMax) {
+        EntityManager em = getEntityManager();
+        try {
+            String sql = "SELECT cp FROM CustomerPrice cp WHERE 1=1 AND cp.status=:flag";
+            CustomerMaster cm = new CustomerMaster();
+            ProductMaster pm = new ProductMaster();
+
+            if (true) {
+                sql = sql + " AND cp.customerMasterId=:customerMasterId";
+            }
+            if (true) {
+                sql = sql + " AND cp.productMasterId=:productMasterId";
+            }
+            if (PriceMin.length() > 0) {
+                sql = sql + " AND cp.rangePrice>:PriceMin";
+            }
+            if (PriceMax.length() > 0) {
+                sql = sql + " AND cp.rangePrice<:PriceMax";
+            }
+            if (RangesMin.length() > 0) {
+
+                sql = sql + " AND cp.ranges>:RangesMin";
+            }
+            if (RangesMax.length() > 0) {
+                sql = sql + " AND cp.ranges<:RangesMax";
+            }
+            Query query = em.createQuery(sql);
+            query.setParameter("flag", true);
+            if (true) {
+                query.setParameter("customerMasterId", customerMasterName);
+            }
+            if (true) {
+                query.setParameter("productMasterId", productMasterName);
+            }
+            if (PriceMin.length() > 0) {
+                query.setParameter("PriceMin", Float.parseFloat(PriceMin));
+            }
+            if (PriceMax.length() > 0) {
+                query.setParameter("PriceMax", Float.parseFloat(PriceMax));
+            }
+            if (RangesMin.length() > 0) {
+                query.setParameter("RangesMin", Integer.parseInt(RangesMin));
+            }
+            if (RangesMax.length() > 0) {
+                query.setParameter("RangesMax", Integer.parseInt(RangesMax));
+            }
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+
+    }
+
+    //对查询结果分页
+    
+    
+    
     public int getCustomerPriceCount() {
         EntityManager em = getEntityManager();
         try {
@@ -150,5 +207,5 @@ public class CustomerPriceDAO implements Serializable {
             em.close();
         }
     }
-    
+
 }

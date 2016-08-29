@@ -27,7 +27,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="pages/static/h-ui/css/H-ui.css" />
 <link rel="stylesheet" type="text/css" href="pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="pages/lib/icheck/icheck.css" />
-<link rel="stylesheet" type="text/css" href="pages/static/h-ui/css/style.css" />
 <!--[if lt IE 9]>
 <link href="static/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -42,27 +41,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 <section class="container">
 	<div class="line"></div>
-	<form action="" method="post" class="form form-horizontal responsive" id="demoform">
+	<form action="" method="post" class="form form-horizontal responsive">
 		<div class="row cl">
-			<label class="form-label col-xs-2">账户：</label>
-			<div class="formControls col-xs-5">
-                            <input type="text" class="input-text" autocomplete="off" value="admin" placeholder="用户名" name="username" id="username" nullmsg="账户不能为空">
-			</div>
-			<div class="col-xs-5"> </div>
+		<label class="form-label col-xs-2">账户：</label>
+		<div class="formControls col-xs-5">
+                   <input type="text" class="input-text" autocomplete="off" value="admin" placeholder="用户名" name="username" id="username" nullmsg="账户不能为空">
+		</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-2">密码：</label>
-			<div class="formControls col-xs-5">
-                            <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" nullmsg="请输入密码！" >
-			</div>
-			<div class="col-xs-5"> </div>
+		<label class="form-label col-xs-2">密码：</label>
+		<div class="formControls col-xs-5">
+                    <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" nullmsg="请输入密码！" >
+                        <p class="c-error text-l">${message}</p>
 		</div>
-            </div>
+		</div>
             <div class="row cl">
-			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<input class="btn btn-primary radius" type="submit" value="登录" >
-			</div>
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+		    <input class="btn btn-primary radius" type="submit" value="登录" >
 		</div>
+	    </div>
 	</form>
 </section>
 

@@ -38,6 +38,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CustomerMaster.findByStatus", query = "SELECT c FROM CustomerMaster c WHERE c.status = :status")})
 public class CustomerMaster implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "status")
+    private boolean status;
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "customer_id")
@@ -56,8 +60,6 @@ public class CustomerMaster implements Serializable {
     @Basic(optional = false)
     @Column(name = "customer_master_id")
     private Integer customerMasterId;
-    @Column(name = "status")
-    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerMasterId")
     private Collection<CustomerPrice> customerPriceCollection;
 
@@ -116,13 +118,6 @@ public class CustomerMaster implements Serializable {
         this.customerMasterId = customerMasterId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @XmlTransient
     public Collection<CustomerPrice> getCustomerPriceCollection() {
@@ -156,6 +151,14 @@ public class CustomerMaster implements Serializable {
     @Override
     public String toString() {
         return "iot.dao.entity.CustomerMaster[ customerMasterId=" + customerMasterId + " ]";
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
     
 }
