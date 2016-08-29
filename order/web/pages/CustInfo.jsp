@@ -27,7 +27,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui/css/H-ui.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/icheck/icheck.css" />
-<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui/css/style.css" />
 <!--[if lt IE 9]>
 <link href="static/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -36,14 +35,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>客户信息</title>
-<meta name="keywords" content="表格">
-
- <script type="text/javascript">
-            function add() {
-                window.location = "<%=basePath%>CustInfo/CustAdd";
-
-            }
-        </script>
         
 </head>
 <body>
@@ -55,28 +46,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <p>客户编码：<input type="text" name="customerId" class="input-text radius" style="width:100px" />
                     客户名称：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
                     <input class="btn btn-primary radius"  type="submit" value="查询"/>
+                    <input class="btn btn-primary radius" type="button" value="新增" onclick="add()"/>
                 </p>
             </form>
         </div>
 
         <table  class="table table-border table-bordered table-striped" >
             <tr>
-                <th style="width:100px">客户姓名</th> <th style="width:100px">客户邮箱</th>  <th style="width:100px">客户电话</th>   
+                <th style="width:100px">客户编号</th><th style="width:100px">客户姓名</th> <th style="width:100px">客户邮箱</th>  <th style="width:100px">客户电话</th>   <th style="width:100px">操作</th> 
             </tr>
             <c:forEach items="${cmList}" var ="customer">
                 <tr>
+                     <td style="width:100px"><c:out value="${customer.customerId}"></c:out></td>
                     <td style="width:100px"><c:out value="${customer.customerName}"></c:out></td>
                     <td style="width:100px"><c:out value="${customer.customerMail}"></c:out></td> 
                     <td style="width:100px"><c:out value="${customer.customerPhone}"></c:out></td>
+                    <td>
+                    <input class="btn btn-primary radius" type="submit" value="修改" onclick="update()"/>
+                    <input class="btn btn-primary radius" type="submit" value="删除" onclick="delete()"/>
+                    </td>
                     </tr>
             </c:forEach> 
         </table>
-        <div align="right">
-            <input class="btn btn-primary radius" type="button" value="新增" onclick="add()"/>
-            <input class="btn btn-primary radius" type="submit" value="修改" onclick="update()"/>
-            <input class="btn btn-primary radius" type="submit" value="删除" onclick="delete()"/>
-        </div>
-	</form>
 </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -89,7 +80,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
+      
+    function add() {
+                window.location = "<%=basePath%>CustInfo/CustAdd";
 
+    }
+    
+    $("tr").click(function(){
+
+
+        var str = [];
+        var num = 0;
+        $(this).find("td").each(function(i){
+
+           var txt = $(this).text();
+           str[num] = txt;
+           num++;
+           });
+           
+           
+        window.location = "<%=basePath%>CustInfo/CustEdit?customerId="+str[0]+"";
+           
+       
+    });
+            
+         
 </script>
 </body>
 </html>

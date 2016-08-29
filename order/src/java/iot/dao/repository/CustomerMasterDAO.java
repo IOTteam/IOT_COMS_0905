@@ -205,6 +205,17 @@ public class CustomerMasterDAO implements Serializable {
            em.close();//关闭实体管理
        }
     }
+    public List<CustomerMaster> findCustomerMasterByName(String CustomerName){//通过产品名字查询产品信息（放入了List中）
+    EntityManager em =getEntityManager();
+        try {
+            Query query=em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerName LIKE :CustomerName AND c.status=:flag");
+            query.setParameter("CustomerName", "%"+CustomerName+"%");
+            query.setParameter("flag", true);
+            return query.getResultList();
+        } finally{
+        em.close();
+        }
+    }
     
 }
    

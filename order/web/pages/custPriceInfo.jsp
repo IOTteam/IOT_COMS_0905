@@ -43,10 +43,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="">
             <form action="CustQuery" method="post">
                 <h3 align="center">客户产品单价信息列表</h3>
-                <p>客户编码：<input type="text" name="customerId" class="input-text radius" style="width:100px" />
+                <p>
                    客户名称：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
-                   产品编码：<input type="text" name="ProductId" class="input-text radius" style="width:100px" />
-                   产品名称：<input type="text" name="Product" class="input-text radius" style="width:100px" />
+                   产品名称：<input type="text" name="productName" class="input-text radius" style="width:100px" />
+                   价格起价：<input type="text" name="priceMin" class="input-text radius" style="width:100px" />
+                   价格终价：<input type="text" name="priceMax" class="input-text radius" style="width:100px" />
+                   数量起量：<input type="text" name="rangesMin" class="input-text radius" style="width:100px" />
+                   数量终量：<input type="text" name="rangesMax" class="input-text radius" style="width:100px" />
+                   
 
                     <input class="btn btn-primary radius"  type="submit" value="查询"/>
                 </p>
@@ -62,6 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </tr>
             <c:forEach items="${custPriceList}" var ="custPrice">
                 <tr>
+                    <td hidden="true" style="width:100px"><c:out value="${custPrice.customerPriceId}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerId}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerName}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice.productMasterId.productId}"></c:out></td> 
@@ -107,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            num++;
            });
 
-        //window.location = "<%=basePath%>CustPrice/CustEdit?customerId="+str[0]+"";
+        window.location = "<%=basePath%>CustPrice/CustPriceEdit?customerPriceId="+str[0]+"";
     });
     
     function next(){

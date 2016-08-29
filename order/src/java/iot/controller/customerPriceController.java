@@ -5,13 +5,17 @@
  */
 package iot.controller;
 
+import iot.dao.entity.CustomerPrice;
 import iot.dao.repository.CustomerPriceDAO;
+import iot.service.CustomerPriceService;
 import javax.persistence.EntityManagerFactory;
+import org.eclipse.persistence.mappings.transformers.ConstantTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -26,6 +30,9 @@ public class customerPriceController {
     @Autowired
     private EntityManagerFactory emf;
     
+    @Autowired
+    private CustomerPriceService cps;
+    
     //查询客户单价表
     @RequestMapping(value = "queryCustPrice",method = RequestMethod.GET)
     public String custPriceQuery(ModelMap model){
@@ -37,13 +44,41 @@ public class customerPriceController {
         return "custPriceInfo";
     }
     
-    //修改客户产品单价信息
-    @RequestMapping(value = "editCustPrice",method = RequestMethod.POST)
-    public String editCustPricePage(ModelMap model){
+    @RequestMapping(value ="CustQuery",method =RequestMethod.POST)
+    public String queryCustomerPrice(@RequestParam("customerName") String CustomerName,@RequestParam("productName") String ProductName,@RequestParam("priceMin") String PriceMin,
+            @RequestParam("priceMax") String PriceMax,@RequestParam("rangesMin") String RangesMin,@RequestParam("rangesMax") String RangesMax ,ModelMap modelMap){
+        modelMap.addAttribute("custPriceList", cps.queryCustomerPrice(CustomerName, ProductName, PriceMin, PriceMax, RangesMin, RangesMax));
+        return "custPriceInfo";
+    
+    }
+    
+    
+    
+    //跳转修改客户产品单价信息
+    @RequestMapping(value = "CustPriceEdit",method = RequestMethod.GET)
+    public String editCustPricePage(@RequestParam("customerPriceId") int CustomerPriceId,ModelMap model){
         
         CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
+        model.addAttribute("CustomerPriceId", cpdao.findCustomerPrice(CustomerPriceId));
+        CustomerPrice cp=new CustomerPrice();
+        cp=cpdao.findCustomerPrice(CustomerPriceId);
+        int rangeMax;
+        if(cp.getRanges()==1){
+         rangeMax=cp.getRanges()+999;
+        }
+        else{
+        rangeMax=cp.getRanges()*2;
+        }
+        model.addAttribute("rangeMax", rangeMax);
+        return "custPriceEdit";
+    }
+    
+    @RequestMapping(value = "CustPriceEdit",method = RequestMethod.POST)
+    public String editCustPrice(@RequestParam("customerPriceId") int CustomerPriceId,@RequestParam("editPrice") String EditPrice,ModelMap model){
         
-        return "custPriceInfo";
+        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
+        model.addAttribute("CustomerPriceId", cpdao.findCustomerPrice(CustomerPriceId));
+        return "custPriceEdit";
     }
     
     //查询下一页
