@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/controller/customerMasterController.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/entity/OrderMaster.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/UserDaoImpl.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/ProductMasterDAO.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/OrderMasterDAO.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/entity/CustomerMaster.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/OrderDetailDAO.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/CustomerMasterDAO.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/orderAdd.jsp</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/service/OrderService.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/orderDetailAdd.jsp</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/orderDetailUpdate.jsp</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/entity/OrderDetail.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/controller/orderController.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/repository/CustomerPriceDAO.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/orderList.jsp</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/orderDetail.jsp</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/src/java/iot/dao/entity/OrderDetailInfo.java</file>
+            <file>file:/C:/Users/GaryLiu/Desktop/IOT_COMS_0905/order/web/pages/CustInfo.jsp</file>
+        </group>
+    </open-files>
 </project-private>
