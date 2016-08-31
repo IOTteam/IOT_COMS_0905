@@ -8,14 +8,18 @@ package iot.controller;
 import iot.dao.entity.CustomerPrice;
 import iot.dao.repository.CustomerPriceDAO;
 import iot.service.CustomerPriceService;
+import java.util.HashMap;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import org.eclipse.persistence.mappings.transformers.ConstantTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  *
@@ -23,92 +27,129 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/CustPrice")
+@SessionAttributes({"queryCondition"})
 public class customerPriceController {
-    
-    private int i = 0;
-    
+
     @Autowired
     private EntityManagerFactory emf;
-    
+
     @Autowired
     private CustomerPriceService cps;
-    
-    //查询客户单价表
-    @RequestMapping(value = "queryCustPrice",method = RequestMethod.GET)
-    public String custPriceQuery(ModelMap model){
+
+    //进入客户产品页面执行的默认查询
+    @RequestMapping(value = "queryCustPrice", method = RequestMethod.GET)
+    public String custPriceQuery(ModelMap model) {
+
+        //将查询条件保存到一个Map中 
+        HashMap<String,String> queryCondition = new HashMap<String, String>();
+        queryCondition.put("CustomerName", "");
+        queryCondition.put("ProductName", "");
+        queryCondition.put("PriceMin", "");
+        queryCondition.put("PriceMax", "");
+        queryCondition.put("RangesMin", "");
+        queryCondition.put("RangesMax", "");
         
-        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
+        //分页查询，并将结果保存到一个Map中
+        HashMap hashMap = cps.divPage("", "", "", "", "", "",0);
         
-               model.addAttribute("index", i/10 + 1);
-        model.addAttribute("custPriceList", cpdao.findCustomerPriceEntities(10,0));
+        //将查询条件保存到Session当中
+        model.addAttribute("queryCondition",queryCondition); 
+        
+        //将当前页、总页及查询数据数传到视图中
+        model.addAttribute("pageNo","1");
+        model.addAttribute("totalPage",hashMap.get("totalPage"));
+        model.addAttribute("custPriceList", hashMap.get("cpList"));
+        
+        //返回视图
         return "custPriceInfo";
     }
-    
-    @RequestMapping(value ="CustQuery",method =RequestMethod.POST)
-    public String queryCustomerPrice(@RequestParam("customerName") String CustomerName,@RequestParam("productName") String ProductName,@RequestParam("priceMin") String PriceMin,
-            @RequestParam("priceMax") String PriceMax,@RequestParam("rangesMin") String RangesMin,@RequestParam("rangesMax") String RangesMax ,ModelMap modelMap){
-        modelMap.addAttribute("custPriceList", cps.queryCustomerPrice(CustomerName, ProductName, PriceMin, PriceMax, RangesMin, RangesMax));
+
+    //客户产品单价条件查询
+    @RequestMapping(value = "CustQuery", method = RequestMethod.POST)
+    public String queryCustomerPrice(@RequestParam("customerName") String CustomerName, @RequestParam("productName") String ProductName, @RequestParam("priceMin") String PriceMin,
+            @RequestParam("priceMax") String PriceMax, @RequestParam("rangesMin") String RangesMin, @RequestParam("rangesMax") String RangesMax, ModelMap modelMap) {
+
+        //将查询条件保存到一个Map中 
+        HashMap<String,String> queryCondition = new HashMap<String, String>();
+        queryCondition.put("CustomerName", CustomerName);
+        queryCondition.put("ProductName", ProductName);
+        queryCondition.put("PriceMin", PriceMin);
+        queryCondition.put("PriceMax", PriceMax);
+        queryCondition.put("RangesMin", RangesMin);
+        queryCondition.put("RangesMax", RangesMax);
+        
+        //分页查询，并将结果保存到一个Map中
+        HashMap hashMap = cps.divPage(CustomerName, ProductName, PriceMin, PriceMax, RangesMin, RangesMax,0);
+        
+        //将查询条件、当前页、总页及查询数据数传到视图中
+        modelMap.addAttribute("queryCondition",queryCondition); 
+        modelMap.addAttribute("pageNo","1");
+        modelMap.addAttribute("totalPage",hashMap.get("totalPage"));
+        modelMap.addAttribute("custPriceList", hashMap.get("cpList"));
+        
+        //返回视图
         return "custPriceInfo";
-    
+
     }
-    
-    
-    
+
     //跳转修改客户产品单价信息
-    @RequestMapping(value = "CustPriceEdit",method = RequestMethod.GET)
-    public String editCustPricePage(@RequestParam("customerPriceId") int CustomerPriceId,ModelMap model){
-        
+    @RequestMapping(value = "CustPriceEdit", method = RequestMethod.GET)
+    public String editCustPricePage(@RequestParam("customerPriceId") int CustomerPriceId, ModelMap model) {
+
         CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
-        model.addAttribute("CustomerPriceId", cpdao.findCustomerPrice(CustomerPriceId));
-        CustomerPrice cp=new CustomerPrice();
-        cp=cpdao.findCustomerPrice(CustomerPriceId);
+        //通过客户产品单价表主键找到需要修改的实体
+        CustomerPrice cp = cpdao.findCustomerPrice(CustomerPriceId);
+       //设置修改时的数量级区间时最大值的确认
         int rangeMax;
-        if(cp.getRanges()==1){
-         rangeMax=cp.getRanges()+999;
+        if (cp.getRanges() == 1) {
+            rangeMax = cp.getRanges() + 999;
+        } else if (cp.getRanges() == 4000) {
+            rangeMax = Integer.MAX_VALUE;//暂时表示为最大值
+        } else {
+            rangeMax = cp.getRanges() * 2;
         }
-        else{
-        rangeMax=cp.getRanges()*2;
-        }
+        //把最大值和实体传回给视图（视图解析器会解析）
         model.addAttribute("rangeMax", rangeMax);
-        return "custPriceEdit";
-    }
-    
-    @RequestMapping(value = "CustPriceEdit",method = RequestMethod.POST)
-    public String editCustPrice(@RequestParam("customerPriceId") int CustomerPriceId,@RequestParam("editPrice") String EditPrice,ModelMap model){
-        
-        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
         model.addAttribute("CustomerPriceId", cpdao.findCustomerPrice(CustomerPriceId));
+       
         return "custPriceEdit";
     }
-    
+
+    //修改客户产品单价信息
+    @RequestMapping(value = "CustPriceEdit", method = RequestMethod.POST)
+    public String editCustPrice(@RequestParam("customerPriceId") int CustomerPriceId, @RequestParam("editPrice") String EditPrice, ModelMap model) throws Exception {
+
+        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
+        CustomerPrice cp = cpdao.findCustomerPrice(CustomerPriceId);//通过CustomerPriceId获取到当前的产品单价
+        cp.setRangePrice(Float.parseFloat(EditPrice));//把前台获取到的EditPrice保存到某个位置
+        cpdao.edit(cp);
+        return "custPriceEdit";
+    }
+
     //查询下一页
-    @RequestMapping(value = "queryNext",method = RequestMethod.GET)
-    public String nextPage(ModelMap model){
+    @RequestMapping(value = "queryNext", method = RequestMethod.GET)
+    @ResponseBody            //将数据转换为合适的格式（Json）
+    public List nextPage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo, ModelMap model) {
+
+        //将查询结果保存在List中
+        List cpList = (List) cps.divPage(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
+                    queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo).get("cpList");
         
-        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
-        i = i + 10;
-        model.addAttribute("index", i/10 + 1);
-        model.addAttribute("custPriceList", cpdao.findCustomerPriceEntities(10,i));
-        return "custPriceInfo";
+        //将数据传回前台
+        return cpList;
     }
-    
+
     //查询上一页
-    @RequestMapping(value = "queryPre",method = RequestMethod.GET)
-    public String prePage(ModelMap model){
+    @RequestMapping(value = "queryPre", method = RequestMethod.GET)
+    @ResponseBody            //将数据转换为合适的格式（Json）
+    public List prePage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo,ModelMap model) {
+
+        //将查询结果保存在List中
+        List cpList = (List) cps.divPage(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
+                    queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo-2).get("cpList");
         
-        CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
-        
-        if(i == 0){
-        
-            i=0;
-        }else{
-        
-            i = i - 10;
-        }
-    
-        model.addAttribute("index", i/10 + 1);
-        model.addAttribute("custPriceList", cpdao.findCustomerPriceEntities(10,i));
-        return "custPriceInfo";
+        //传回数据
+        return cpList;
     }
-    
+
 }

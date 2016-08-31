@@ -165,9 +165,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 preferentialMax:""+ preferentialMax +"", preferentialCredit:""+ preferentialCredit +""},  
                 success : function(data, stats) {  
                     if (stats === "success") {  
-                     console.dir(data);
                      
-                     var i = data.length - 1;
+                var i = data.length - 1;
 		info1 = data[i].customerId;
 		info2 = data[i].productId;
 		info3 = data[i].preferentialMin;

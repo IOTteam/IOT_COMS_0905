@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 <section class="container">
         
-        <form action="CusPriceEdit" method="post">
+        <form action="CustPriceEdit" method="post">
 		<h3 align="center">客户产品单价表修改</h3>
  
                 客户名字：<input type="text" name="customerPriceId"  class="input-text radius" hidden="true" readonly="true" value="${CustomerPriceId.customerPriceId}"></input>

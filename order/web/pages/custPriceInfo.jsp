@@ -44,12 +44,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <form action="CustQuery" method="post">
                 <h3 align="center">客户产品单价信息列表</h3>
                 <p>
-                   客户名称：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
-                   产品名称：<input type="text" name="productName" class="input-text radius" style="width:100px" />
-                   价格起价：<input type="text" name="priceMin" class="input-text radius" style="width:100px" />
-                   价格终价：<input type="text" name="priceMax" class="input-text radius" style="width:100px" />
-                   数量起量：<input type="text" name="rangesMin" class="input-text radius" style="width:100px" />
-                   数量终量：<input type="text" name="rangesMax" class="input-text radius" style="width:100px" />
+                   客户名称：<input type="text" name="customerName" value="${queryCondition.CustomerName}" class="input-text radius" style="width:100px" />
+                   产品名称：<input type="text" name="productName" value="${queryCondition.ProductName}" class="input-text radius" style="width:100px" />
+                   价格起价：<input type="text" name="priceMin" value="${queryCondition.PriceMin}" class="input-text radius" style="width:100px" />
+                   价格终价：<input type="text" name="priceMax" value="${queryCondition.PriceMax}" class="input-text radius" style="width:100px" />
+                   数量起量：<input type="text" name="rangesMin" value="${queryCondition.RangesMin}" class="input-text radius" style="width:100px" />
+                   数量终量：<input type="text" name="rangesMax" value="${queryCondition.RangesMax}" class="input-text radius" style="width:100px" />
                    
 
                     <input class="btn btn-primary radius"  type="submit" value="查询"/>
@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </form>
         </div>
    
-    <table  class="table table-border table-bordered table-striped" >
+    <table  class="table table-border table-bordered table-striped" id="CusPriceForm" >
             <tr>
                 <th style="width:100px">客户编号</th>  <th style="width:100px">客户姓名</th> 
                 <th style="width:100px">产品编号</th>  <th style="width:100px">产品名称</th>   
@@ -65,16 +65,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <th style="width:100px">修改</th> 
             </tr>
             <c:forEach items="${custPriceList}" var ="custPrice">
-                <tr>
-                    <td hidden="true" style="width:100px"><c:out value="${custPrice.customerPriceId}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerId}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerName}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productId}"></c:out></td> 
-                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productName}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice.ranges}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice.rangePrice}"></c:out></td>
+                <tr style="height: 50px" >
+                    <td hidden="true" style="width:100px"><c:out value="${custPrice[0]}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice[1]}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice[2]}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice[3]}"></c:out></td> 
+                    <td style="width:100px"><c:out value="${custPrice[4]}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice[5]}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice[6]}"></c:out></td>
                     <td>
-                    <input class="btn btn-primary radius" type="submit" value="修改" onclick="update()"/>
+                    <input class="btn btn-primary radius" type="button" name="edit" value="修改" onclick="update()" style="display: inline-block;" />
                     </td>
                     </tr>
             </c:forEach> 
@@ -82,7 +82,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <div align="right">
         <p> <input class="btn btn-primary radius" type="button" value="上一页" onclick="pre()"/>
-            ${index}
+            <input class="input-text radius" type="text" id="pageNo" value="${pageNo}" readonly="true" style="width:30px" />
+            /
+            <input class="input-text radius" type="text" id="totalPage" value="${totalPage}" readonly="true" style="width:30px" />
          <input class="btn btn-primary radius" type="button" value="下一页" onclick="next()"/></p>
     </div>
     
@@ -112,18 +114,117 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            num++;
            });
 
-        window.location = "<%=basePath%>CustPrice/CustPriceEdit?customerPriceId="+str[0]+"";
+        //window.location = "<%=basePath%>CustPrice/CustPriceEdit?customerPriceId="+str[0]+"";
     });
     
     function next(){
         
-        window.location = "<%=basePath%>CustPrice/queryNext";
+        if($("#pageNo")[0].value >= $("#totalPage")[0].value){
+            return false;
+        }else{
+            var pageNo_old = parseInt($("#pageNo")[0].value);
+            $("#pageNo")[0].value = pageNo_old + 1; 
+        }
+        
+        $.ajax({  
+                url : "queryNext",  
+                type : "get",  
+                datatype:"json",  
+                data : {pageNo:pageNo_old},  
+                success : function(data, stats) {  
+                    if (stats === "success") {  
+                        
+                        var i = -1;
+                        $("#CusPriceForm").find("tr").each(function(){
+
+                            var j = 0;
+                            $(this).find("td").each(function(){
+                                
+                                console.dir($(this)[0].innerHTML.length);
+                                if($(this)[0].innerHTML.length === 167){
+                                    
+                                    $(this).children().each(function (){
+                                           $(this).show();
+                                       });
+                                    
+                                    if(data[i].toString() === ",,,,,,"){
+                                       $(this).children().each(function (){
+                                           $(this).hide();
+                                       });
+                                    }
+                                    return false;
+                                }else{
+                                    $(this)[0].innerHTML = data[i][j];
+                                     j++;
+                                } 
+                            });
+                            i++;
+                        });
+                    }  
+                },  
+                error : function(data) {  
+                    alert("失败");  
+                }  
+            });
 
     }
     
     function pre(){
         
-        window.location = "<%=basePath%>CustPrice/queryPre";
+        if($("#pageNo")[0].value <= 1){
+            return false;
+        }else{
+            var pageNo_old = parseInt($("#pageNo")[0].value);
+            $("#pageNo")[0].value = pageNo_old - 1; 
+        }
+        
+         $.ajax({  
+                url : "queryPre",  
+                type : "get",  
+                datatype:"json",  
+                data : {pageNo:pageNo_old},  
+                success : function(data, stats) {  
+                    if (stats === "success") {  
+                        
+                        var i = -1;
+                        $("#CusPriceForm").find("tr").each(function(){
+
+                            var j = 0;
+                            $(this).find("td").each(function(){
+                                
+                                if($(this)[0].innerHTML.length === 167){
+                                    
+                                    $(this).children().each(function (){
+                                        console.dir($(this));
+                                        $(this).show();
+                                       });
+                                    
+                                    if(data[i].toString() === ",,,,,,"){
+                                       $(this).children().each(function (){
+                                           $(this).hide();
+                                       });
+                                    }
+                                    
+                                    return false;
+                                }else if($(this)[0].innerHTML.length === 159){
+                                        $(this).children().each(function (){
+                                        console.dir($(this));
+                                        $(this).show();
+                                       });
+                                }else{
+                                    $(this)[0].innerHTML = data[i][j];
+                                     j++;
+                                }
+                            });
+                            i++;
+                        });
+                    }  
+                },  
+                error : function(data) {  
+                    alert("失败");  
+                }  
+            });
+
 
     }
          

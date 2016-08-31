@@ -51,20 +51,22 @@ public class CustomerService {
         CustomerPriceDAO cpdao = new CustomerPriceDAO(emf);
         
         CustomerPrice customerPrice = new CustomerPrice();
-        for (int i = 0; i < customerPriceInfos.size(); i++) {
-            
-            ProductMaster productMasterId = pmdao.findProductMasterByproductId(customerPriceInfos.get(i).getProductId());
-            
-            customerPrice.setCustomerMasterId(cmNew);
-            customerPrice.setProductMasterId(productMasterId);
-            customerPrice.setRangePrice(Float.parseFloat(customerPriceInfos.get(i).getPreferentialCredit()));
-            customerPrice.setRanges(Integer.parseInt(customerPriceInfos.get(i).getPreferentialMin()));
-            customerPrice.setStatus(true);
-            
-            cpdao.create(customerPrice);
-            
-        }
+
+        for(int i=1;i<=pmdao.getProductMasterCount();i++){//此处循环遍历所有productMaster，依次新增customerPrice。
+            int[] ranges = {1,1000,2000,4000};//此处为数据库内部规定的ranges，后期可实现为用户手动输入对应ranges.
+            for(int x=0;ranges.length<4;x++){//此处根据数组range
+
         
+                ProductMaster productMasterId = pmdao.findProductMasterByproductId(Integer.toString(i));
+                
+                customerPrice.setCustomerMasterId(cmNew);
+                customerPrice.setProductMasterId(productMasterId);
+                customerPrice.setRangePrice(pmdao.findProductMaster(i).getProductPrice());
+                customerPrice.setRanges(ranges[x]);
+                customerPrice.setStatus(true);
+                cpdao.create(customerPrice);
+            }
+        }
         customerPriceInfos.clear();
         
     }
