@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<th style="width:100px">订单编码</th> <th style="width:100px">下单日期</th>  <th style="width:100px">下单客户</th> <th style="width:100px">操作</th> 
 		</tr>
                 <c:forEach items="${orderList}" var ="order">
-                    <tr onclick="">
+                    <tr class="orderInfo">
                     <td style="width:100px"><c:out value="${order.orderId}"></c:out></td>
                     <td style="width:100px"><c:out value="${order.orderDate}"></c:out></td> 
                     <td style="width:100px"><c:out value="${order.customerName}"></c:out></td>
@@ -88,25 +88,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 window.location = "<%=basePath%>orderList/orderAdd";
 
             }
+      
+      $(function (){
+        $(".orderInfo").each(function (){
             
-    $("tr").click(function(){
+            var tem = $(this).children().eq(3);
+            var button = tem.children();
+            
 
-
-        var str = [];
-        var num = 0;
-        $(this).find("td").each(function(i){
-
-           var txt = $(this).text();
-           str[num] = txt;
-           num++;
-           });
-           
-           
-        window.location = "<%=basePath%>orderList/detailQuery?orderId="+str[0]+"";
-           
-        console.dir(str);
-       
-      });
+            button.bind("click",function(){ 
+               var val = button.parent().parent().children("td").get(0).innerHTML;
+               console.dir(val);
+               if($(this)[0].value === "详细"){
+                   window.location = "<%=basePath%>orderList/detailQuery?orderId=="+val+"";
+               }
+               
+               if($(this)[0].value === "删除"){
+                   window.location = "<%=basePath%>orderList/orderDel?orderId=="+val+"";
+               }
+            });
+            
+      });  
+    })
     
 </script>
 </body>

@@ -88,10 +88,10 @@ public class CustomerPriceService {
             map.put("cpList", null);
             return map;
         }
+        
+         if (cpListAll.size() < index_next && index == 0) {
 
-        if (index < cpListAll.size() && index_next < cpListAll.size()) {
-
-            for (; index < index_next; index++) {
+            for (; index < cpListAll.size(); index++) {
 
                 List list = new ArrayList();
                 list.add(cpListAll.get(index).getCustomerPriceId());
@@ -106,9 +106,9 @@ public class CustomerPriceService {
 
             }
 
-        } else if (cpListAll.size() < index_next) {
+        }else if(index < cpListAll.size() && index_next < cpListAll.size()) {
 
-            for (; index < cpListAll.size(); index++) {
+            for (; index < index_next; index++) {
 
                 List list = new ArrayList();
                 list.add(cpListAll.get(index).getCustomerPriceId());
@@ -159,5 +159,4 @@ public class CustomerPriceService {
 
     }
 
-    //进入时默认
 }

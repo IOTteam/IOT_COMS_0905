@@ -56,14 +56,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <th style="width:100px">客户编号</th><th style="width:100px">客户姓名</th> <th style="width:100px">客户邮箱</th>  <th style="width:100px">客户电话</th>   <th style="width:100px">操作</th> 
             </tr>
             <c:forEach items="${cmList}" var ="customer">
-                <tr>
+                <tr class="custInfo">
                      <td style="width:100px"><c:out value="${customer.customerId}"></c:out></td>
                     <td style="width:100px"><c:out value="${customer.customerName}"></c:out></td>
                     <td style="width:100px"><c:out value="${customer.customerMail}"></c:out></td> 
                     <td style="width:100px"><c:out value="${customer.customerPhone}"></c:out></td>
                     <td>
-                    <input class="btn btn-primary radius" type="submit" value="修改" onclick="update()"/>
-                    <input class="btn btn-primary radius" type="submit" value="删除" onclick="delete()"/>
+                    <input class="btn btn-primary radius" type="submit" value="修改"/>
+                    <input class="btn btn-primary radius" type="submit" value="删除"/>
                     </td>
                     </tr>
             </c:forEach> 
@@ -85,24 +85,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 window.location = "<%=basePath%>CustInfo/CustAdd";
 
     }
-    
-    $("tr").click(function(){
 
+     $(function (){
+        $(".custInfo").each(function (){
+            
+            var tem = $(this).children().eq(4);
+            var button = tem.children();
 
-        var str = [];
-        var num = 0;
-        $(this).find("td").each(function(i){
-
-           var txt = $(this).text();
-           str[num] = txt;
-           num++;
-           });
-           
-           
-        window.location = "<%=basePath%>CustInfo/CustEdit?customerId="+str[0]+"";
-           
-       
-    });
+            button.bind("click",function(){ 
+               var val = button.parent().parent().children("td").get(0).innerHTML;
+               
+               if($(this)[0].value === "修改"){
+                   window.location = "<%=basePath%>CustInfo/CustEdit?customerId="+val+"";
+               }
+               
+               if($(this)[0].value === "删除"){
+                   window.location = "<%=basePath%>CustInfo/CustDel?customerId="+val+"";
+               }
+            });
+            
+      });  
+    })
             
          
 </script>

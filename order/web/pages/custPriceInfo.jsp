@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <th style="width:100px">修改</th> 
             </tr>
             <c:forEach items="${custPriceList}" var ="custPrice">
-                <tr style="height: 50px" >
+                <tr style="height: 50px" class="CusPrice" >
                     <td hidden="true" style="width:100px"><c:out value="${custPrice[0]}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice[1]}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice[2]}"></c:out></td>
@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <td style="width:100px"><c:out value="${custPrice[5]}"></c:out></td>
                     <td style="width:100px"><c:out value="${custPrice[6]}"></c:out></td>
                     <td>
-                    <input class="btn btn-primary radius" type="button" name="edit" value="修改" onclick="update()" style="display: inline-block;" />
+                    <input class="btn btn-primary radius" type="button" name="edit" value="修改" style="display: inline-block;" />
                     </td>
                     </tr>
             </c:forEach> 
@@ -102,47 +102,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
     
-        $("tr").click(function(){
+    $(function (){
+        $(".CusPrice").each(function (){
+            
+            var tem = $(this).children().eq(7);
+            var button = tem.children();
 
-
-        var str = [];
-        var num = 0;
-        $(this).find("td").each(function(i){
-
-           var txt = $(this).text();
-           str[num] = txt;
-           num++;
-           });
-
-        //window.location = "<%=basePath%>CustPrice/CustPriceEdit?customerPriceId="+str[0]+"";
-    });
+            button.bind("click",function(){ 
+               var val = button.parent().parent().children("td").get(0).innerHTML;
+               window.location = "<%=basePath%>CustPrice/CustPriceEdit?customerPriceId="+val+"";
+            });
+      });  
+    })
+    
     
     function next(){
         
-        if($("#pageNo")[0].value >= $("#totalPage")[0].value){
+        var pageNo = parseInt($("#pageNo")[0].value);
+        var totalPage = parseInt($("#totalPage")[0].value);
+        
+        if(pageNo >= totalPage){
             return false;
         }else{
-            var pageNo_old = parseInt($("#pageNo")[0].value);
-            $("#pageNo")[0].value = pageNo_old + 1; 
+            $("#pageNo")[0].value = pageNo + 1; 
         }
         
         $.ajax({  
                 url : "queryNext",  
                 type : "get",  
                 datatype:"json",  
-                data : {pageNo:pageNo_old},  
+                data : {pageNo:pageNo},  
                 success : function(data, stats) {  
                     if (stats === "success") {  
-                        
+                       
                         var i = -1;
                         $("#CusPriceForm").find("tr").each(function(){
 
                             var j = 0;
                             $(this).find("td").each(function(){
-                                
-                                console.dir($(this)[0].innerHTML.length);
-                                if($(this)[0].innerHTML.length === 167){
-                                    
+
+                                if($(this)[0].innerHTML.length === 148){                                   
                                     $(this).children().each(function (){
                                            $(this).show();
                                        });
@@ -166,23 +165,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     alert("失败");  
                 }  
             });
-
-    }
-    
+        }
+            
     function pre(){
         
-        if($("#pageNo")[0].value <= 1){
+        var pageNo = parseInt($("#pageNo")[0].value);
+        if(pageNo <= 1){
             return false;
         }else{
-            var pageNo_old = parseInt($("#pageNo")[0].value);
-            $("#pageNo")[0].value = pageNo_old - 1; 
+            $("#pageNo")[0].value = pageNo - 1; 
         }
         
          $.ajax({  
                 url : "queryPre",  
                 type : "get",  
                 datatype:"json",  
-                data : {pageNo:pageNo_old},  
+                data : {pageNo:pageNo},  
                 success : function(data, stats) {  
                     if (stats === "success") {  
                         
@@ -192,7 +190,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             var j = 0;
                             $(this).find("td").each(function(){
                                 
-                                if($(this)[0].innerHTML.length === 167){
+                                if($(this)[0].innerHTML.length === 148){
                                     
                                     $(this).children().each(function (){
                                         console.dir($(this));
@@ -206,9 +204,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     }
                                     
                                     return false;
-                                }else if($(this)[0].innerHTML.length === 159){
+                                }else if($(this)[0].innerHTML.length === 140){
                                         $(this).children().each(function (){
-                                        console.dir($(this));
                                         $(this).show();
                                        });
                                 }else{
@@ -224,9 +221,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     alert("失败");  
                 }  
             });
-
-
     }
+
+    
+
          
 </script>
 </body>
