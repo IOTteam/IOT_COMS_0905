@@ -55,6 +55,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <p class="c-error text-l">${message}</p>
 		</div>
 		</div>
+                
+                <div class="row cl">  
+                   <label class="form-label col-xs-2" >验证码:</label> 
+                   <div class="formControls col-xs-5">
+                   <input class="input-text" name="j_code" type="text" id="kaptcha" maxlength="4" class="form-control" />
+                   <br/> 
+                   <img src="<%=basePath%>/login/captcha-image" id="kaptchaImage"  style="margin-bottom: -3px"/>       
+                   <a onclick="changeCode()">看不清?换一张</a>  
+		   </div>
+                </div>
+                
             <div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 		    <input class="btn btn-primary radius" type="submit" value="登录" >
@@ -75,16 +86,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script>
 //var navigation = responsiveNav("Hui-navbar", {customToggle: ".nav-toggle"});
 
-$(function(){
-	$('.skin-minimal input').iCheck({
-		checkboxClass: 'icheckbox-blue',
-		radioClass: 'iradio-blue',
-		increaseArea: '20%'
-	});
-	$("#demoform").Validform({
-		tiptype:2
-	});
-});
+
+    $(function(){  //生成验证码         
+        $('#kaptchaImage').click(function () {  
+        $(this).hide().attr('src', '<%=basePath%>/login/captcha-image?' + Math.floor(Math.random()*100) ).fadeIn(); });      
+    });   
+  		  
+    function changeCode() {  //刷新
+        $('#kaptchaImage').hide().attr('src', '<%=basePath%>/login/captcha-image?' + Math.floor(Math.random()*100) ).fadeIn();  
+        event.cancelBubble=true;  
+    } 
+    
+    window.onbeforeunload = function(){  
+    //关闭窗口时自动退出  
+    if(event.clientX>360&&event.clientY<0||event.altKey){     
+        alert(parent.document.location);  
+    }  
+  }; 
 </script>
 </body>
 </html>
