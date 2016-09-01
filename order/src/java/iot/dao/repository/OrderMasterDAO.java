@@ -16,7 +16,9 @@ import iot.dao.repository.exceptions.IllegalOrphanException;
 import iot.dao.repository.exceptions.NonexistentEntityException;
 import iot.dao.repository.exceptions.PreexistingEntityException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -217,5 +219,55 @@ public class OrderMasterDAO implements Serializable {
             em.close();
         }
     }
-    
+        //通过ID，日期查询订单头档
+    public List<OrderMaster> queryOrderMasterByDate(String firstOrderDate,String lastOrderDate,String orderId){
+        EntityManager em = getEntityManager();
+        try{
+            Date first = new Date();
+            Date last = new Date();
+            String[] dateDivide = firstOrderDate.split("-");
+            if(dateDivide.length ==3){
+                int year = Integer.parseInt(dateDivide [0].trim());//去掉空格
+                int month = Integer.parseInt(dateDivide [1].trim());  
+                int day = Integer.parseInt(dateDivide [2].trim());  
+                Calendar c = Calendar.getInstance();//获取一个日历实例  
+                c.set(year, month-1, day);//设定日历的日期 
+                first = c.getTime();
+            }
+            String[] dateDivide2 = lastOrderDate.split("-");
+            if(dateDivide2.length ==3){
+                int year = Integer.parseInt(dateDivide2 [0].trim());//去掉空格
+                int month = Integer.parseInt(dateDivide2 [1].trim());  
+                int day = Integer.parseInt(dateDivide2 [2].trim());  
+                Calendar c = Calendar.getInstance();//获取一个日历实例  
+                c.set(year, month-1, day);//设定日历的日期 
+                last = c.getTime();
+            }//以上步骤为裁剪日期，目的是将string类型的日期转换为date类型
+           
+            Query query ;
+            String sql ="SELECT c FROM OrderMaster as c WHERE 1=1 ";
+            if (firstOrderDate.length()>0) {//判断初始日期是否为空，不为空则添加查询语句
+                sql = sql + "and c.orderDate  >:firstOrderDate ";
+            }
+            if (lastOrderDate.length()>0) {//判断终止日期是否为空，不为空则添加查询语句
+                sql = sql + "and c.orderDate <:lastOrderDate";
+            }
+            if(orderId.length()>0){//判断orderID是否为空，不为空则添加查询语句
+               sql=sql+" AND c.orderId LIKE :orderId";
+               } 
+            query = em.createQuery(sql);
+            if (orderId.length()>0) {
+                query.setParameter("orderId", orderId);
+            }
+            if (firstOrderDate.length()>0) {
+                query.setParameter("firstOrderDate", first);
+            }
+            if (lastOrderDate.length()>0) {
+                query.setParameter("lastOrderDate", last);
+            }
+            return  query.getResultList();
+        }finally{
+           em.close();
+        }
+    }
 }
