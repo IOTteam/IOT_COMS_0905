@@ -121,7 +121,8 @@ public class orderController {
         model.addAttribute("orderId", orderMasterId);
         return "redirect:/orderList/detailQuery";
     }
-        //查询订单头档
+    
+    //查询订单头档
     @RequestMapping(value = "orderQuery",method = RequestMethod.POST)
             public  String queryOrderMasterByDate(
                     @RequestParam("customerId") String orderId,
@@ -140,5 +141,4 @@ public class orderController {
         model.addAttribute("orderList", orders);
         return "orderList";
     }
-    //删除订单详细信息
 }
