@@ -210,4 +210,15 @@ public class OrderDetailDAO implements Serializable {
             em.close();
         }
     }
+    
+    public long count(ProductMaster productId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT count(o) FROM OrderDetail o WHERE o.productId = :productId");
+            query.setParameter("productId", productId);
+            return (Long)query.getSingleResult();
+        } finally{
+            em.close();
+        }
+    }
 }

@@ -41,11 +41,14 @@ public class orderController {
     //查询订单详细信息
     @RequestMapping(value = "detailQuery",method = RequestMethod.GET)
     public String getDetail(@RequestParam("orderId") String orderId,ModelMap model){
-        
-        List<OrderDetailInfo> orders = orderService.getDetails(orderId);
-        int orderMasterId = orderService.getOrderMaster(orderId).getOrderMasterId();
-        model.addAttribute("orderMasterId", orderMasterId);
-        model.addAttribute("CustomerId",orderService.getOrderMaster(orderId).getCustomerId());
+        int i =1;String x ="1";
+        System.out.println(orderId+"*******************************************************************************************************************");
+        List<OrderDetailInfo> orders = orderService.getDetails(x);
+        //int orderMasterId = orderService.getOrderMaster(orderId).getOrderMasterId();
+        //model.addAttribute("orderMasterId", orderMasterId);
+        //model.addAttribute("CustomerId",orderService.getOrderMaster(orderId).getCustomerId());
+        model.addAttribute("orderMasterId",i );
+        model.addAttribute("CustomerId",x);
         model.addAttribute("detailList", orders);
         return "orderDetail";
         

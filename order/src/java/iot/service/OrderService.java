@@ -18,6 +18,7 @@ import iot.dao.repository.CustomerPriceDAO;
 import iot.dao.repository.OrderDetailDAO;
 import iot.dao.repository.OrderMasterDAO;
 import iot.dao.repository.ProductMasterDAO;
+import iot.dao.repository.exceptions.NonexistentEntityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,15 +47,15 @@ public class OrderService {
         CustomerMasterDAO cmdao = new CustomerMasterDAO(emf);
         List<OrderInfo> ordersNew = new ArrayList<OrderInfo>();
         for(int i=0;i<orders.size();i++){
-    
-        CustomerMaster cm = cmdao.findCustomerMasterById(orders.get(i).getCustomerId());
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setCustomerId(orders.get(i).getCustomerId());
-        orderInfo.setCustomerName(cm.getCustomerName());
-        orderInfo.setOrderDate(orders.get(i).getOrderDate());
-        orderInfo.setOrderId(orders.get(i).getOrderId());
-
-        ordersNew.add(i,orderInfo);
+            if (orders.get(i).getStatus()) {//于此处判断status的状态
+                 CustomerMaster cm = cmdao.findCustomerMasterById(orders.get(i).getCustomerId());
+                 OrderInfo orderInfo = new OrderInfo();
+                 orderInfo.setCustomerId(orders.get(i).getCustomerId());
+                 orderInfo.setCustomerName(cm.getCustomerName());
+                 orderInfo.setOrderDate(orders.get(i).getOrderDate());
+                 orderInfo.setOrderId(orders.get(i).getOrderId());
+                ordersNew.add(orderInfo);
+            }
     }
         return ordersNew;
     }
@@ -67,16 +68,18 @@ public class OrderService {
         
         List<OrderDetailInfo> orderDetailInfos = new ArrayList<OrderDetailInfo>();
         for(int i = 0;i < orderDetails.size();i++){
-        
-            OrderDetailInfo odi = new OrderDetailInfo();
-            odi.setOrderMasterId_int(orderDetails.get(i).getOrderMasterId().getOrderMasterId());
-            odi.setProductId_int(Integer.parseInt(orderDetails.get(i).getProductId().getProductId()));//获取ProductId，并强制转换成int
-            odi.setProductName(orderDetails.get(i).getProductId().getProductName());
-            odi.setOrderPrice(orderDetails.get(i).getOrderPrice());
-            odi.setOrderQty(orderDetails.get(i).getOrderQty());
-            odi.setOrderDetailId(orderDetails.get(i).getOrderDetailId());
+            if (orderDetails.get(i).getStatus()) {//于此处判断status的状态
+                OrderDetailInfo odi = new OrderDetailInfo();
+                odi.setOrderMasterId_int(orderDetails.get(i).getOrderMasterId().getOrderMasterId());
+                odi.setProductId_int(Integer.parseInt(orderDetails.get(i).getProductId().getProductId()));//获取ProductId，并强制转换成int
+                odi.setProductName(orderDetails.get(i).getProductId().getProductName());
+                odi.setOrderPrice(orderDetails.get(i).getOrderPrice());
+                odi.setOrderQty(orderDetails.get(i).getOrderQty());
+                odi.setOrderDetailId(orderDetails.get(i).getOrderDetailId());
             
-            orderDetailInfos.add(odi);
+                orderDetailInfos.add(odi);
+            }
+            
         }
 
         return orderDetailInfos;
@@ -89,7 +92,8 @@ public class OrderService {
         
         return om;
     }
-    //获取订单头档数量及当前时间
+    //获取订单头档数量及当前时间  
+    //在跳转至新增订单头档时需要使用。以获得最新的订单头档ID和当前时间
     public HashMap getOrderCount(){
     
         OrderMasterDAO omdao = new OrderMasterDAO(emf);
@@ -120,7 +124,7 @@ public class OrderService {
         om.setOrderId(orderId);
         om.setOrderDate(d);
         om.setOrderMasterId(Integer.parseInt(orderId));
-        
+        om.setStatus(true);//设置状态status
         omdao.create(om);
 
     }
@@ -144,6 +148,7 @@ public class OrderService {
         orderDetail.setProductId(pmId);
         orderDetail.setOrderQty(Integer.parseInt(orderQty));
         orderDetail.setOrderPrice(cp.getRangePrice());
+        orderDetail.setStatus(true);//设置status
             
         OrderDetailDAO oddao = new OrderDetailDAO(emf);
         oddao.create(orderDetail);//新增orderDetail
@@ -177,6 +182,37 @@ public class OrderService {
         orderDetail.setOrderDetailId(Integer.parseInt(orderDetailId));
         OrderDetailDAO oddao = new OrderDetailDAO(emf);
         oddao.edit(orderDetail);
+        return true;
+    }
+    //删除订单详细信息
+     public boolean orderDetailDelete(String orderDetailId) throws Exception{
+         OrderDetailDAO oddao = new OrderDetailDAO(emf);
+         OrderDetail od =oddao.findOrderDetail(Integer.parseInt(orderDetailId));
+         OrderDetail orderDetail =new OrderDetail();
+         orderDetail.setOrderDetailId(Integer.parseInt(orderDetailId));
+         orderDetail.setOrderMasterId(od.getOrderMasterId());
+         orderDetail.setOrderPrice(od.getOrderPrice());
+         orderDetail.setOrderQty(od.getOrderQty());
+         orderDetail.setProductId(od.getProductId());
+         orderDetail.setStatus(false);
+         oddao.edit(orderDetail);
+         return true;
+         
+     }
+    //删除订单头档
+    public boolean orderMasterDelete(String orderMasterId) throws Exception{
+        OrderMasterDAO omdao = new OrderMasterDAO(emf);//新建一个ordermaster类
+        OrderMaster omId = omdao.findOrderMaster(Integer.parseInt(orderMasterId));//根据参数orderMasterId查到具体OrderMaster类
+        OrderMaster orderMaster =new OrderMaster();
+        
+        orderMaster.setCustomerId(omId.getCustomerId());
+        orderMaster.setOrderDate(omId.getOrderDate());
+        orderMaster.setOrderId(orderMasterId);
+        orderMaster.setStatus(false);//设置status
+        orderMaster.setOrderMasterId(Integer.parseInt(orderMasterId));
+        orderMaster.setOrderDetailCollection(omId.getOrderDetailCollection());
+        OrderMasterDAO oddao = new OrderMasterDAO(emf);
+        oddao.edit(orderMaster);
         return true;
     }
 }
