@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<ul class="cl">
 					<li class="current"><a href="<%=basePath%>CustInfo/CustQuery">客户信息</a></li>
 					<li><a href="<%=basePath%>orderList/queryList">订单列表</a></li>
-					<li><a href="#">商品信息</a></li>
+					<li><a href="<%=basePath%>productMaster/loadProductMaster">商品信息</a></li>
 					<li><a href="<%=basePath%>CustPrice/queryCustPrice">客户产品单价</a></li>
 				</ul>
 			</nav>

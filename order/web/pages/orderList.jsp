@@ -100,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                var val = button.parent().parent().children("td").get(0).innerHTML;
                console.dir(val);
                if($(this)[0].value === "详细"){
-                   window.location = "<%=basePath%>orderList/detailQuery?orderId=="+val+"";
+                   window.location = "<%=basePath%>orderList/detailQuery?orderId="+val+"";
                }
                
                if($(this)[0].value === "删除"){

@@ -207,5 +207,26 @@ public class CustomerPriceDAO implements Serializable {
             em.close();
         }
     }
+    public List findByProductMasterId(ProductMaster productMasterId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT c FROM CustomerPrice c WHERE c.productMasterId = :productMasterId");
+            query.setParameter("productMasterId", productMasterId);
+            return query.getResultList();
+        } finally{
+            em.close();
+        }
+    }
+
+    public Long count(Integer customerPriceId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT count(c) FROM CustomerPrice c WHERE c.customerPriceId = :customerPriceId");
+            query.setParameter("customerPriceId", customerPriceId);
+            return (Long)query.getSingleResult();
+        } finally{
+            em.close();
+        }
+    }
 
 }
