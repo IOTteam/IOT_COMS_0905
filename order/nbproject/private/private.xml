@@ -5,15 +5,10 @@
         <group>
             <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/service/OrderService.java</file>
             <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/controller/orderController.java</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/dao/repository/ProductMasterDAO.java</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/service/CustomerPriceService.java</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/orderDetail.jsp</file>
+            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/controller/productMasterController.java</file>
+            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/dao/entity/OrderDetail.java</file>
             <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/orderList.jsp</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/dao/repository/CustomerPriceDAO.java</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/WEB-INF/applicationContext.xml</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/index.jsp</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/dao/repository/OrderDetailDAO.java</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/WEB-INF/dispatcher-servlet.xml</file>
+            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/service/ProductMasterService.java</file>
             <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/dao/repository/OrderMasterDAO.java</file>
         </group>
     </open-files>

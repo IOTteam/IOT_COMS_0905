@@ -72,7 +72,7 @@ public class productMasterController {
         if(!productName.equals("")){
             sql = sql +"and p.productName LIKE :productName ";
         }
-        if(!productName.equals("")){
+        if(!productSpec.equals("")){
             sql = sql +"and p.productSpec LIKE :productSpec ";
         }
         /***如果将priceMin定义为Float类型，当productName以及productName做为联合查询条件时，为抛出异常**/

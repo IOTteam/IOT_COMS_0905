@@ -121,5 +121,24 @@ public class orderController {
         model.addAttribute("orderId", orderMasterId);
         return "redirect:/orderList/detailQuery";
     }
+        //查询订单头档
+    @RequestMapping(value = "orderQuery",method = RequestMethod.POST)
+            public  String queryOrderMasterByDate(
+                    @RequestParam("customerId") String orderId,
+                    @RequestParam("firstOrderDate") String firstOrderDate,
+                    @RequestParam("lastOrderDate") String lastOrderDate,
+                    ModelMap model){
+                List<OrderInfo> orders = orderService.queryOrderInfo(orderId, firstOrderDate, lastOrderDate);
+                model.addAttribute("orderList", orders);
+                return "orderList";
+            }
+    //删除订单头档
+    @RequestMapping(value = "orderDelete",method = RequestMethod.GET)
+    public  String deleteOrderMaster(@RequestParam("orderId") String orderId,ModelMap model)throws Exception{
+        boolean i =orderService.orderMasterDelete(orderId);
+        List<OrderInfo> orders = orderService.getOrderList();
+        model.addAttribute("orderList", orders);
+        return "orderList";
+    }
     //删除订单详细信息
 }

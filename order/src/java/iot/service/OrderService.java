@@ -68,6 +68,7 @@ public class OrderService {
         
         List<OrderDetailInfo> orderDetailInfos = new ArrayList<OrderDetailInfo>();
         for(int i = 0;i < orderDetails.size();i++){
+        //for(int i =0;i<1;i++){
             if (orderDetails.get(i).getStatus()) {//于此处判断status的状态
                 OrderDetailInfo odi = new OrderDetailInfo();
                 odi.setOrderMasterId_int(orderDetails.get(i).getOrderMasterId().getOrderMasterId());
@@ -180,6 +181,7 @@ public class OrderService {
         orderDetail.setOrderQty(Integer.parseInt(orderQty));
         orderDetail.setOrderPrice(cp.getRangePrice());
         orderDetail.setOrderDetailId(Integer.parseInt(orderDetailId));
+        orderDetail.setStatus(true);
         OrderDetailDAO oddao = new OrderDetailDAO(emf);
         oddao.edit(orderDetail);
         return true;
@@ -203,6 +205,8 @@ public class OrderService {
     public boolean orderMasterDelete(String orderMasterId) throws Exception{
         OrderMasterDAO omdao = new OrderMasterDAO(emf);//新建一个ordermaster类
         OrderMaster omId = omdao.findOrderMaster(Integer.parseInt(orderMasterId));//根据参数orderMasterId查到具体OrderMaster类
+        OrderDetailDAO oddao = new OrderDetailDAO(emf);
+        List<OrderDetail> orderDetails = oddao.findOrderDetailByOrderMId(omId);//查找该头档下的所有订单身档，以便做级联删除
         OrderMaster orderMaster =new OrderMaster();
         
         orderMaster.setCustomerId(omId.getCustomerId());
@@ -211,8 +215,32 @@ public class OrderService {
         orderMaster.setStatus(false);//设置status
         orderMaster.setOrderMasterId(Integer.parseInt(orderMasterId));
         orderMaster.setOrderDetailCollection(omId.getOrderDetailCollection());
-        OrderMasterDAO oddao = new OrderMasterDAO(emf);
-        oddao.edit(orderMaster);
+        omdao.edit(orderMaster);
+        for(int i=0;i<orderDetails.size();i++){
+            boolean x = orderDetailDelete(orderDetails.get(i).getOrderDetailId()+"");
+        }
         return true;
     }
+        //查询订单头档 通过ID，日期
+    public  List<OrderInfo> queryOrderInfo(String orderId,String firstOrderDate,String lastOrderDate){
+        OrderMasterDAO omdao = new OrderMasterDAO(emf);
+        //List<OrderMaster> order =omdao.queryOrderMasterByIdDate(orderId, firstOrderDate, lastOrderDate);
+        List<OrderMaster> order =omdao.queryOrderMasterByDate(firstOrderDate, lastOrderDate,orderId);
+        CustomerMasterDAO cmdao = new CustomerMasterDAO(emf);
+         List<OrderInfo> ordersNew = new ArrayList<OrderInfo>();
+        for(int i=0;i<order.size();i++){
+            if (order.get(i).getStatus()) {//于此处判断status状态
+                CustomerMaster cm = cmdao.findCustomerMasterById(order.get(i).getCustomerId());
+                OrderInfo orderInfo = new OrderInfo();
+                orderInfo.setCustomerId(order.get(i).getCustomerId());
+                orderInfo.setCustomerName(cm.getCustomerName());
+                orderInfo.setOrderDate(order.get(i).getOrderDate());
+                orderInfo.setOrderId(order.get(i).getOrderId());
+
+                ordersNew.add(orderInfo);//此处不能使用ordersNew.add(i,orderInfo)格式。自己体会
+            }
+        }
+        return ordersNew;
+    }
+
 }

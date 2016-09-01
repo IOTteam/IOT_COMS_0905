@@ -45,7 +45,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <form action="orderQuery" method="post">
 		<h3 align="center">订单信息列表</h3>
 		    <p>订单编码：<input type="text" name="customerId" class="input-text radius" style="width:100px" />
-                       下单日期：<input type="text" name="customerName" class="input-text radius" style="width:100px" />
+                       下单日期：<input type="text" name="firstOrderDate" class="input-text radius" style="width:100px" />
+                       下单日期：<input type="text" name="lastOrderDate" class="input-text radius" style="width:100px" />
                        <input class="btn btn-primary radius"  type="submit" value="查询"/>
                        <input class="btn btn-primary radius" type="button" value="新增" onclick="add()"/>
                     </p>
@@ -104,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                }
                
                if($(this)[0].value === "删除"){
-                   window.location = "<%=basePath%>orderList/orderDel?orderId=="+val+"";
+                   window.location = "<%=basePath%>orderList/orderDelete?orderId="+val+"";
                }
             });
             
