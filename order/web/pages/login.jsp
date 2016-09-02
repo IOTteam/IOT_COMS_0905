@@ -36,7 +36,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <![endif]-->
 <title>用户登录</title>
 <meta name="keywords" content="登陆">
-<meta name="description" content="试试">
 </head>
 <body>
 <section class="container">
@@ -51,26 +50,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row cl">
 		<label class="form-label col-xs-2">密码：</label>
 		<div class="formControls col-xs-5">
-                    <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" nullmsg="请输入密码！" >
-                        <p class="c-error text-l">${message}</p>
+                    <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" nullmsg="请输入密码！" >          
 		</div>
+                <p class="c-error text-l">${message}</p>
 		</div>
                 
                 <div class="row cl">  
                    <label class="form-label col-xs-2" >验证码:</label> 
                    <div class="formControls col-xs-5">
-                   <input class="input-text" name="j_code" type="text" id="kaptcha" maxlength="4" class="form-control" />
-                   <br/> 
+                   <input class="input-text" name="kaptcha" type="text" id="kaptcha" maxlength="4">
                    <img src="<%=basePath%>/login/captcha-image" id="kaptchaImage"  style="margin-bottom: -3px"/>       
                    <a onclick="changeCode()">看不清?换一张</a>  
 		   </div>
+                   <p class="c-error text-l">${message_k}</p>
                 </div>
-                
-            <div class="row cl">
-		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-		    <input class="btn btn-primary radius" type="submit" value="登录" >
-		</div>
-	    </div>
+        <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input type="submit" class="btn btn-success radius size-L" value="登陆">
+          <input type="reset" class="btn btn-default radius size-L" value="取消">
+        </div>
+      </div>
 	</form>
 </section>
 

@@ -47,7 +47,17 @@ public class loginController {
     
     //用户登录
     @RequestMapping(method = RequestMethod.POST)
-    public String loginAction(@RequestParam("username") String username,@RequestParam("password") String password,ModelMap model){
+    public String loginAction(@RequestParam("username") String username,@RequestParam("password") String password,@RequestParam("kaptcha") String kaptcha,
+            HttpServletRequest request,ModelMap model){
+        
+        HttpSession session = request.getSession();  
+        String code = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY); 
+        
+        if (!code.equals(kaptcha)) {
+            
+            model.addAttribute("message_k", "验证码错误");
+            return "login";
+        }
         
         UserDaoImpl udi = new UserDaoImpl();
         User user = udi.getUserByNameAndPassword(username,password);
@@ -66,8 +76,7 @@ public class loginController {
         
         HttpSession session = request.getSession();  
         String code = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY);  
-        System.out.println("验证码: " + code );  
-          
+        
         response.setDateHeader("Expires", 0);  
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");  
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");  

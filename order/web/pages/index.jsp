@@ -22,6 +22,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui/css/H-ui.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/skin/default/skin.css" id="skin" />
+
 <!--[if lt IE 9]>
 <link href="static/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -31,65 +34,64 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <![endif]-->
 <title>客户信息</title>
 <meta name="keywords" content="表格">
-
-  <script type="text/javascript">
-            function getOrderList(){
-                window.location = "<%=basePath%>order/orderList";
-
-            }
-        </script>
-        
 </head>
 <body>
-<section class="container">
-    
-    <header class="navbar-wrapper">
-	<div class="navbar navbar-fixed-top ">
-		<div class="container cl">
-			<a class="logo navbar-logo f-l mr-10 hidden-xs f-26">客户订单管理系统</a>
-			<nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
+            
+<header class="navbar-wrapper">
+	<div class="navbar navbar-fixed-top">
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
-					<li class="current"><a href="<%=basePath%>CustInfo/CustQuery">客户信息</a></li>
-					<li><a href="<%=basePath%>orderList/queryList">订单列表</a></li>
-					<li><a href="<%=basePath%>productMaster/loadProductMaster">商品信息</a></li>
-					<li><a href="<%=basePath%>CustPrice/queryCustPrice">客户产品单价</a></li>
+					<li>欢迎登陆,</li>
+					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">${user.userName}</a>
+						<ul class="dropDown-menu menu radius box-shadow">
+							<li><a href="<%=basePath%>login/userInfo">个人信息</a></li>
+							<li><a href="<%=basePath%>login/editPassword">修改密码</a></li>
+							<li><a href="<%=basePath%>/login">退出</a></li>
+						</ul>
+					</li>
 				</ul>
 			</nav>
-                                            
-        	<ul class="Hui-userbar text-r">
-		<li class="dropDown dropDown_hover"><a href="#" class="c-red" >${user.userName},欢迎登陆</a>
-			<ul class="dropDown-menu radius box-shadow">
-				<li><a href="<%=basePath%>login/userInfo">个人信息</a></li>
-                                <li><a href="<%=basePath%>login/editPassword">修改密码</a></li>
-				<li><a href="<%=basePath%>/login">退出</a></li>
-			</ul>
-		</li>
-                </ul>
 		</div>
 	</div>
 </header>
-                        
-                        <div class="page">
-                            
-                        </div>
-                                        
-    <footer class="footer mt-20">
-	<div class="container">
-
-		<p>IOT六人小分队 <br></p>
+            
+<aside class="Hui-aside">
+	<div class="menu_dropdown">
+	    <ul>
+                <li>
+                    <a href="<%=basePath%>CustInfo/CustQuery">客户信息</a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="<%=basePath%>orderList/queryList">订单列表</a>
+                </li>
+            </ul>
+              <ul>
+                <li>
+                    <a href="<%=basePath%>productMaster/loadProductMaster">商品信息</a>
+                </li>
+            </ul>
+              <ul>
+                <li>
+                    <a href="<%=basePath%>CustPrice/queryCustPrice">客户产品单价</a>
+                </li>
+            </ul>
 	</div>
-</footer>        
-</section>
+</aside>
+    
+    <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+      <section class="Hui-article-box">
+	<div id="iframe_box" class="Hui-article">
+
+	</div>
+      </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/layer/2.1/layer.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/laypage/1.2/laypage.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/My97DatePicker/WdatePicker.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/icheck/jquery.icheck.min.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/bootstrap-Switch/bootstrapSwitch.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/Validform.min.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="<%=basePath%>pages/static/h-ui.admin/js/H-ui.admin.js"></script> 
 <script>
 
 </script>

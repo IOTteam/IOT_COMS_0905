@@ -5,7 +5,6 @@
  */
 package iot.service;
 
-import com.sun.javafx.image.IntPixelGetter;
 import iot.dao.entity.CustomerMaster;
 import iot.dao.entity.CustomerPrice;
 import iot.dao.entity.OrderDetail;
@@ -18,7 +17,6 @@ import iot.dao.repository.CustomerPriceDAO;
 import iot.dao.repository.OrderDetailDAO;
 import iot.dao.repository.OrderMasterDAO;
 import iot.dao.repository.ProductMasterDAO;
-import iot.dao.repository.exceptions.NonexistentEntityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

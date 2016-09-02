@@ -1011,7 +1011,7 @@ ul.inline > li,ol.inline > li{display:inline-block;*display:inline;padding-right
 	.list-view > .item > a{display:block; margin:-11px -15px;}
 	.night .list-view > .item{border-bottom: 1px solid #1F1F1F}
 	.list-view > .item .date{display:none}
-	.list-view > .item .Hui-iconfont {background-size:9px auto;margin-top:-7px;position: absolute;right:15px;top: 50%;}
+	.list-view > .item .Hui-iconfont {background-size:9px auto;margin-top:-7px;position: absolute;right:15px;top: 50%;color: white}
 }
 
 /*排行榜*/

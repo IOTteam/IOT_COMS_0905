@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -181,12 +182,13 @@ public class CustomerMasterDAO implements Serializable {
 
         EntityManager em = getEntityManager();//创建实体管理
         try {
-
-            Query query = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId and c.status = :flag");
+            Query query = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerId = :customerId");
             query.setParameter("customerId", customerId);
-            query.setParameter("flag", true);
+            //query.setParameter("flag", true);
             return (CustomerMaster) query.getSingleResult();
 
+        }catch(NoResultException e){
+            return null;
         } finally {
             em.close();//关闭实体管理
         }

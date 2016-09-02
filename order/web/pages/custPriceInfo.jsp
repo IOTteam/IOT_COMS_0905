@@ -27,6 +27,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui/css/H-ui.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/skin/default/skin.css" id="skin" />
 <!--[if lt IE 9]>
 <link href="static/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -38,26 +40,66 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
 </head>
 <body>
-<section class="container">
-
-        <div class="">
+<header class="navbar-wrapper">
+	<div class="navbar navbar-fixed-top">
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+				<ul class="cl">
+					<li>欢迎登陆,</li>
+					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">${user.userName}</a>
+						<ul class="dropDown-menu menu radius box-shadow">
+							<li><a href="<%=basePath%>login/userInfo">个人信息</a></li>
+							<li><a href="<%=basePath%>login/editPassword">修改密码</a></li>
+							<li><a href="<%=basePath%>/login">退出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</header>
+            
+<aside class="Hui-aside">
+	<div class="menu_dropdown">
+	    <ul>
+                <li>
+                    <a href="<%=basePath%>CustInfo/CustQuery">客户信息</a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="<%=basePath%>orderList/queryList">订单列表</a>
+                </li>
+            </ul>
+              <ul>
+                <li>
+                    <a href="<%=basePath%>productMaster/loadProductMaster">商品信息</a>
+                </li>
+            </ul>
+              <ul>
+                <li>
+                    <a href="<%=basePath%>CustPrice/queryCustPrice">客户产品单价</a>
+                </li>
+            </ul>
+	</div>
+</aside>
+                
+      <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+      <section class="Hui-article-box">
+         <div class="page-container">
             <form action="CustQuery" method="post">
+            <p>
                 <h3 align="center">客户产品单价信息列表</h3>
-                <p>
                    客户名称：<input type="text" name="customerName" value="${queryCondition.CustomerName}" class="input-text radius" style="width:100px" />
                    产品名称：<input type="text" name="productName" value="${queryCondition.ProductName}" class="input-text radius" style="width:100px" />
                    价格起价：<input type="text" name="priceMin" value="${queryCondition.PriceMin}" class="input-text radius" style="width:100px" />
                    价格终价：<input type="text" name="priceMax" value="${queryCondition.PriceMax}" class="input-text radius" style="width:100px" />
                    数量起量：<input type="text" name="rangesMin" value="${queryCondition.RangesMin}" class="input-text radius" style="width:100px" />
                    数量终量：<input type="text" name="rangesMax" value="${queryCondition.RangesMax}" class="input-text radius" style="width:100px" />
-                   
-
                     <input class="btn btn-primary radius"  type="submit" value="查询"/>
                 </p>
-            </form>
-        </div>
-   
-    <table  class="table table-border table-bordered table-striped" id="CusPriceForm" >
+    </form>
+    <table  class="table table-border table-bordered table-bg" id="CusPriceForm" >
             <tr>
                 <th style="width:100px">客户编号</th>  <th style="width:100px">客户姓名</th> 
                 <th style="width:100px">产品编号</th>  <th style="width:100px">产品名称</th>   
@@ -87,9 +129,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <input class="input-text radius" type="text" id="totalPage" value="${totalPage}" readonly="true" style="width:30px" />
          <input class="btn btn-primary radius" type="button" value="下一页" onclick="next()"/></p>
     </div>
-    
-    
-</section>
+    </div>
+   </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/layer/2.1/layer.js"></script> 
