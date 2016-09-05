@@ -43,14 +43,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a href="<%=basePath%>/index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+		<div class="container-fluid cl"> <a href="<%=basePath%>index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
 					<li>欢迎登陆,</li>
 					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">${user.userName}</a>
 						<ul class="dropDown-menu menu radius box-shadow">
-							<li><a href="<%=basePath%>login/userInfo">个人信息</a></li>
-							<li><a href="<%=basePath%>login/editPassword">修改密码</a></li>
+							<li><a data-toggle="modal" href="#userInfo">个人信息</a></li>
+                                                        <li><a data-toggle="modal" href="#passwordEdit">修改密码</a></li>
 							<li><a href="<%=basePath%>/login">退出</a></li>
 						</ul>
 					</li>
@@ -118,17 +118,84 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </div>
       <div class="footer">IOT TEAM</div>
       </section>
+    
+    <div id="userInfo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-header">
+    <h3 id="myModalLabel">用户信息</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+ </div>
+  <div class="modal-body">
+    	<form action="" class="form form-horizontal responsive">
+            	<div class="row cl">
+		<label class="form-label col-xs-3">用户编号：</label>
+		<div class="formControls col-xs-5">
+                   <input type="text" class="input-text" autocomplete="off" value="${user.userId}" name="username" />
+		</div>
+		</div>
+		<div class="row cl">
+		<label class="form-label col-xs-3">用户姓名：</label>
+		<div class="formControls col-xs-5">
+                    <input type="text" class="input-text" autocomplete="off"  value="${user.userName}" name="password" />
+		</div>
+		</div>
+        </form>
+ </div>
+  <div class="modal-footer">
+ <button class="btn" data-dismiss="modal" aria-hidden="true">确定</button>
+ </div>
+</div>
+                
+<div id="passwordEdit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-header">
+    <h3 id="myModalLabel">修改密码</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+ </div>
+  <div class="modal-body">
+    	<form action="login/editPassword" method="post" class="form form-horizontal responsive">
+            	<div class="row cl">
+		<label class="form-label col-xs-3">原密码：</label>
+		<div class="formControls col-xs-5">
+                   <input type="password" class="input-text" autocomplete="off" name="passwordOld" />
+		</div>
+		</div>
+		<div class="row cl">
+		<label class="form-label col-xs-3">新密码：</label>
+		<div class="formControls col-xs-5">
+                    <input type="password" class="input-text" autocomplete="off" name="passwordNew" />
+		</div>
+		</div>
+                <div class="row cl">
+		<label class="form-label col-xs-3">确认新密码：</label>
+		<div class="formControls col-xs-5">
+                    <input type="password" class="input-text" autocomplete="off"  name="passwordConfirm" />
+                     <p class="c-error text-l">${message}</p>
+		</div>
+		</div>
+                
+                <div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+		    <input class="btn btn-primary radius" type="submit" value="保存" >
+                    <input type="button" class="btn btn-primary radius" value="取消" data-dismiss="modal" aria-hidden="true">
+		</div>
+                
+        </form>
+ </div>
+</div>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/layer/2.1/layer.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/laypage/1.2/laypage.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/My97DatePicker/WdatePicker.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/icheck/jquery.icheck.min.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/bootstrap-Switch/bootstrapSwitch.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/Validform.min.js"></script> 
-<script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="<%=basePath%>pages/lib/bootstrap-modal/2.2.4/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<%=basePath%>pages/lib/bootstrap-modal/2.2.4/bootstrap-modal.js"></script>
 <script>
+    
+    $(function (){
+        
+        var session = <%=session.getAttribute("user")%>;
+        if(session === null){
+             window.location = "<%=basePath%>login";
+        }
+        
+    });
       
     function add() {
                 window.location = "<%=basePath%>CustInfo/CustAdd";

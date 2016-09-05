@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a href="<%=basePath%>/index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+		<div class="container-fluid cl"> <a href="<%=basePath%>index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
 					<li>欢迎登陆,</li>
@@ -130,6 +130,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
+    
+        $(function (){
+        
+        var session = <%=session.getAttribute("user")%>;
+        if(session === null){
+             window.location = "<%=basePath%>login";
+        }
+        
+    });
 
     function add(){
                 window.location = "<%=basePath%>orderList/orderAdd";
