@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/static/h-ui.admin/images/loginbg.jpg</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/static/h-ui.admin/css/H-ui.login.css</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/login.jsp</file>
-            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/static/h-ui.admin/images/admin-loginform-bg.png</file>
+            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/web/pages/index.jsp</file>
+            <file>file:/C:/Users/hatanococoro/Documents/GitHub/IOT_COMS_0905/order/src/java/iot/controller/loginController.java</file>
         </group>
     </open-files>
 </project-private>
