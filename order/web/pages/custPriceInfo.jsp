@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+		<div class="container-fluid cl"> <a href="<%=basePath%>/index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
 					<li>欢迎登陆,</li>
@@ -130,6 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <input class="btn btn-primary radius" type="button" value="下一页" onclick="next()"/></p>
     </div>
     </div>
+    <div class="footer">IOT TEAM</div>
    </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 

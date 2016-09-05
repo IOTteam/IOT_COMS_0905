@@ -22,6 +22,8 @@ h4{line-height:30px}
 .Hui-article-box{position: absolute;top:44px;right:0;bottom: 0;left:199px; overflow:hidden; z-index:1; background-color:#fff}
 	.Hui-article{position: absolute;top:34px;bottom:0;left:0; right:0;overflow:auto;z-index:1}
 .Hui-container{ padding:45px 0 0}
+       .footer{ position:absolute; left:0; right:0; width:100%; z-index:99}
+       .footer{ height:36px; line-height:46px; bottom:0;margin-bottom: 0px; text-align:center; font-size:12px;color:#130c0e;}
 .Hui-aside,.Hui-article-box,.dislpayArrow{-moz-transition: all 0.2s ease 0s;-webkit-transition: all 0.2s ease 0s;-ms-transition: all 0.2s ease 0s;-o-transition: all 0.2s ease 0s;transition: all 0.2s ease 0s}
 .big-page .Hui-article-box,.big-page .dislpayArrow,.big-page .breadcrumb{left:0px}
 .big-page .Hui-aside{ left:-200px}
@@ -121,7 +123,7 @@ h4{line-height:30px}
 .portfolio-area li .checkbox{position: absolute; top: 10px; right: 5px; cursor:pointer}
 .portfolio-area li.hover .portfoliobox{ height:auto;padding-bottom:10px;box-shadow:0 1px 3px rgba(68, 68, 68,0.3);-moz-box-shadow:0 1px 3px rgba(68, 68, 68,0.3);-webkit-box-shadow:0 1px 3px rgba(68, 68, 68,0.3)}
 .portfolio-area li .picbox{width: 150px; height: 150px;overflow: hidden;text-align: center;vertical-align:middle;display:table-cell; line-height:150px;}
-.portfolio-area li .picbox img{max-width:150px; max-height:150px;vertical-align:middle;_margin-top: expression_r(( 150 - this.height ) / 2);}
+//.portfolio-area li .picbox img{max-width:150px; max-height:150px;vertical-align:middle;_margin-top: expression_r(( 150 - this.height ) / 2);}
 .portfolio-area li .textbox{ display: none; margin-top: 5px;}
 .portfolio-area li.hover .textbox{ display: block;}
 .portfolio-area li label{ display:block; cursor:pointer}

@@ -19,9 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="lib/respond.min.js"></script>
 <script type="text/javascript" src="lib/PIE_IE678.js"></script>
 <![endif]-->
-<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui/css/H-ui.css" />
-<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
-<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/lib/icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/css/myStyle.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/css/H-ui.admin.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>pages/static/h-ui.admin/skin/default/skin.css" id="skin" />
 
@@ -39,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
+		<div class="container-fluid cl"> <a href="<%=basePath%>/index" class="logo navbar-logo f-l mr-10 hidden-xs">客户订单管理系统</a>
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
 					<li>欢迎登陆,</li>
@@ -83,10 +81,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
       <section class="Hui-article-box">
-	<div id="iframe_box" class="Hui-article">
-
+        <div class="page-container">
+            <p>欢迎登陆,${user.userName}</p>
+            <p>现在是北京时间XXXX</p>
 	</div>
+        <div class="footer">IOT TEAM</div>
       </section>
+    
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="<%=basePath%>pages/lib/layer/2.1/layer.js"></script> 
