@@ -24,9 +24,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="lib/respond.min.js"></script>
 <script type="text/javascript" src="lib/PIE_IE678.js"></script>
 <![endif]-->
-<link rel="stylesheet" type="text/css" href="pages/static/h-ui/css/H-ui.css" />
-<link rel="stylesheet" type="text/css" href="pages/lib/Hui-iconfont/1.0.7/iconfont.css" />
-<link rel="stylesheet" type="text/css" href="pages/lib/icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="pages/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="pages/static/h-ui.admin/css/H-ui.login.css" />
 <!--[if lt IE 9]>
 <link href="static/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -38,49 +37,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="keywords" content="登陆">
 </head>
 <body>
-<section class="container">
-	<div class="line"></div>
+  <div class="header"></div>
+  <div class="loginWraper">
+  <div class="loginBox">
 	<form action="" method="post" class="form form-horizontal responsive">
 		<div class="row cl">
 		<label class="form-label col-xs-2">账户：</label>
 		<div class="formControls col-xs-5">
-                   <input type="text" class="input-text" autocomplete="off" value="admin" placeholder="用户名" name="username" id="username" nullmsg="账户不能为空">
+                   <input type="text" class="input-text" autocomplete="off" value="admin" placeholder="用户名" name="username" id="username" >
 		</div>
 		</div>
 		<div class="row cl">
 		<label class="form-label col-xs-2">密码：</label>
 		<div class="formControls col-xs-5">
-                    <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" nullmsg="请输入密码！" >          
+                    <input type="password" class="input-text" autocomplete="off" value="admin" placeholder="密码" name="password" id="password" >          
 		</div>
-                <p class="c-error text-l">${message}</p>
 		</div>
                 
-                <div class="row cl">  
+       <div class="row cl">  
                    <label class="form-label col-xs-2" >验证码:</label> 
                    <div class="formControls col-xs-5">
                    <input class="input-text" name="kaptcha" type="text" id="kaptcha" maxlength="4">
                    <img src="<%=basePath%>/login/captcha-image" id="kaptchaImage"  style="margin-bottom: -3px"/>       
                    <a onclick="changeCode()">看不清?换一张</a>  
+                    <p class="c-red text-l">${message_k}</p>
+                    <p class="c-red text-l">${message}</p>
 		   </div>
-                   <p class="c-error text-l">${message_k}</p>
-                </div>
+                  
+        </div>
+
         <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
           <input type="submit" class="btn btn-success radius size-L" value="登陆">
           <input type="reset" class="btn btn-default radius size-L" value="取消">
         </div>
       </div>
-	</form>
-</section>
+    </form>
+  </div>
+  </div>
+  <div class="footer">IOT TEAM</div>
 
 <script type="text/javascript" src="pages/lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="pages/lib/layer/2.1/layer.js"></script> 
-<script type="text/javascript" src="pages/lib/laypage/1.2/laypage.js"></script> 
-<script type="text/javascript" src="pages/lib/My97DatePicker/WdatePicker.js"></script> 
-<script type="text/javascript" src="pages/lib/icheck/jquery.icheck.min.js"></script> 
-<script type="text/javascript" src="pages/lib/bootstrap-Switch/bootstrapSwitch.js"></script> 
-<script type="text/javascript" src="pages/lib/Validform/5.3.2/Validform.min.js"></script> 
-<script type="text/javascript" src="pages/lib/Validform/5.3.2/passwordStrength-min.js"></script>
 <script type="text/javascript" src="pages/static/h-ui/js/H-ui.js"></script>
 <script>
 //var navigation = responsiveNav("Hui-navbar", {customToggle: ".nav-toggle"});
