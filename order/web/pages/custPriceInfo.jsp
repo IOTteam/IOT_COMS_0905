@@ -144,6 +144,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
     
+       $(function (){
+        
+        var session = "<%=session.getAttribute("user")%>";
+        if(session === null){
+             window.location = "<%=basePath%>login";
+        }
+        
+    });
+    
     $(function (){
         $(".CusPrice").each(function (){
             

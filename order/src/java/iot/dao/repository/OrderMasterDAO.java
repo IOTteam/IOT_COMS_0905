@@ -22,6 +22,10 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 /**
  *
@@ -174,9 +178,15 @@ public class OrderMasterDAO implements Serializable {
     private List<OrderMaster> findOrderMasterEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(OrderMaster.class));
+            
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<OrderMaster> cq = cb.createQuery(OrderMaster.class);
+            Metamodel metamodel = em.getMetamodel();
+            EntityType<OrderMaster> orderMaster_ = metamodel.entity(OrderMaster.class);
+            Root<OrderMaster> orderMaster = cq.from(OrderMaster.class);
+            cq.where(cb.equal(orderMaster.get(orderMaster_.getSingularAttribute("status")), true));
             Query q = em.createQuery(cq);
+            
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -206,6 +216,23 @@ public class OrderMasterDAO implements Serializable {
             em.close();
         }
     }
+     
+     //通过客户ID查询订单头档
+     public List<OrderMaster> findOrderMasterByCustomerId(String customerId){
+     
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT o FROM OrderMaster o WHERE o.customerId = :customerId and o.status = :status");
+            query.setParameter("customerId", customerId);
+            query.setParameter("status", true);
+            return query.getResultList();
+        }catch(NoResultException exception){
+            return null;
+        }finally {
+            em.close();
+        }
+         
+     }
 
     public int getOrderMasterCount() {
         EntityManager em = getEntityManager();

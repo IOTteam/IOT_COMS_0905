@@ -6,7 +6,6 @@
 package iot.dao.repository;
 
 import iot.dao.entity.User;
-import iot.dao.repository.UserDAO;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,6 +13,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 /**
  *
@@ -49,19 +54,34 @@ public class UserDaoImpl implements UserDAO{
         return user;
    }
     
+    //通过用户名和密码来查找用户
     @Override
     public User getUserByNameAndPassword(String username,String password){
         
+        //创建实体工厂，并使用工厂构建实体管理
         emf = Persistence.createEntityManagerFactory("orderPU");
         EntityManager em = emf.createEntityManager();  
         
         try {
-            
-        Query query = em.createQuery("SELECT u FROM User u where u.userName=:username and u.password=:password");
-        query.setParameter("username", username);
-        query.setParameter("password", password);
-        User user =(User)query.getSingleResult();
-        return user;
+        
+        //创建安全查询工厂
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        //创建查询主语句
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        //实例化元模型类
+        Metamodel metamodel = em.getMetamodel();
+        EntityType<User> user_ = metamodel.entity(User.class);
+        //定义实体类型
+        Root<User> user = cq.from(User.class);
+        //构造过滤条件
+        Predicate condition = cb.and(cb.equal(user.get(user_.getSingularAttribute("userName")), username),
+                                     cb.equal(user.get(user_.getSingularAttribute("password")), password));
+        cq.where(condition);
+        //创建查询
+        Query q = em.createQuery(cq);
+        //返回查询结果
+        User userInfo =(User)q.getSingleResult();
+        return userInfo;
             
         } catch (NoResultException e) {
            return null;

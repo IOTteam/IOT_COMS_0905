@@ -33,7 +33,7 @@ public class ProductMasterService {
     }
 
     public void removeProductMaster(ProductMaster productMaster) {
-        productMaster.setStatus(false);
+        productMaster.setStatus("0");
         this.productMasterImpl.save(productMaster);
     }
     

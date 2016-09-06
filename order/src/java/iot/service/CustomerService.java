@@ -8,10 +8,12 @@ package iot.service;
 import iot.dao.entity.CustomerMaster;
 import iot.dao.entity.CustomerPrice;
 import iot.dao.entity.CustomerPriceInfo;
+import iot.dao.entity.OrderMaster;
 import iot.dao.entity.Product;
 import iot.dao.entity.ProductMaster;
 import iot.dao.repository.CustomerMasterDAO;
 import iot.dao.repository.CustomerPriceDAO;
+import iot.dao.repository.OrderMasterDAO;
 import iot.dao.repository.ProductMasterDAO;
 import iot.dao.repository.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
@@ -165,6 +167,15 @@ public class CustomerService {
         CustomerMasterDAO cmdao = new CustomerMasterDAO(emf);
         CustomerMaster customerMaster = cmdao.findCustomerMasterById(customerId);
         customerMaster.setStatus(false);
+        
+        OrderMasterDAO omdao = new OrderMasterDAO(emf);
+        List<OrderMaster> orderMasterList = omdao.findOrderMasterByCustomerId(customerId);
+        
+        for (OrderMaster orderMaster : orderMasterList) {
+            orderMaster.setStatus(false);
+            omdao.edit(orderMaster);
+        }
+        
         
         cmdao.edit(customerMaster);
     }

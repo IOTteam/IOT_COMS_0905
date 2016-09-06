@@ -38,9 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CustomerMaster.findByStatus", query = "SELECT c FROM CustomerMaster c WHERE c.status = :status")})
 public class CustomerMaster implements Serializable {
 
-    @Basic(optional = false)
     @Column(name = "status")
-    private boolean status;
+    private Boolean status;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -153,11 +152,11 @@ public class CustomerMaster implements Serializable {
         return "iot.dao.entity.CustomerMaster[ customerMasterId=" + customerMasterId + " ]";
     }
 
-    public boolean getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
     

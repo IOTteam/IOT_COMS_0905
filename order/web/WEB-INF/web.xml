@@ -16,26 +16,24 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
-     <filter>
-             <filter-name>encodingFilter</filter-name>
-             <filter-class>
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>
                      org.springframework.web.filter.CharacterEncodingFilter 
              </filter-class>
-             <init-param>
-                    <param-name>encoding</param-name>
-                    <param-value>UTF-8</param-value>
-             </init-param>
-             <init-param>
-                    <param-name>forceEncoding</param-name>
-                    <param-value>true</param-value>
-             </init-param>
-        </filter>
-        <filter-mapping>
-              <filter-name>encodingFilter</filter-name>
-              <url-pattern>/*</url-pattern>
-        </filter-mapping>
-        
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <session-config>
         <session-timeout>
             30
@@ -44,4 +42,11 @@
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>
     </welcome-file-list>
+    <resource-ref>
+        <description>jdbc:mysql://192.168.41.41:3306/db_coms?zeroDateTimeBehavior=convertToNull</description>
+        <res-ref-name>jdbc</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
 </web-app>

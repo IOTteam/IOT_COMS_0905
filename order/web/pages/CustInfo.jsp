@@ -188,9 +188,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/lib/bootstrap-modal/2.2.4/bootstrap-modal.js"></script>
 <script>
     
-    $(function (){
+   $(function (){
         
-        var session = <%=session.getAttribute("user")%>;
+        var session = "<%=session.getAttribute("user")%>";
         if(session === null){
              window.location = "<%=basePath%>login";
         }

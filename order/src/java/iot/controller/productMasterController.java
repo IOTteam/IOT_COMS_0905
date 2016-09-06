@@ -123,7 +123,7 @@ public class productMasterController {
     public String addProductMaster(ProductMaster productMaster,@RequestParam("ranges") List<Integer> ranges,
         @RequestParam("rangePrice") List<Float> rangePrice,ServletRequest request) throws Exception{
         
-        productMaster.setStatus(true);//设置Status的值，表明新增的数据是有效的
+        productMaster.setStatus("1");//设置Status的值，表明新增的数据是有效的
         this.productMasterService.addproductMaster(productMaster);//通过调用productMasterService中的addproductMaster方法将数据保存到数据库
         
         CustomerMasterDAO customerMasterDAO = new CustomerMasterDAO(emf);//创建customerPriceDAO对象

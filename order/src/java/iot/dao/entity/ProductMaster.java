@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ProductMaster implements Serializable {
 
     @Column(name = "status")
-    private Boolean status;
+    private String status;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -160,11 +160,11 @@ public class ProductMaster implements Serializable {
         return "iot.dao.entity.ProductMaster[ productMasterId=" + productMasterId + " ]";
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     

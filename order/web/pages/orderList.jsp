@@ -131,26 +131,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>pages/static/h-ui/js/H-ui.js"></script>
 <script>
     
-        $(function (){
+    $(function (){
         
-        var session = <%=session.getAttribute("user")%>;
+        var session = "<%=session.getAttribute("user")%>";
+        console.dir(session);
         if(session === null){
              window.location = "<%=basePath%>login";
         }
         
     });
-
+    
     function add(){
                 window.location = "<%=basePath%>orderList/orderAdd";
 
             }
       
       $(function (){
+          
         $(".orderInfo").each(function (){
             
             var tem = $(this).children().eq(3);
             var button = tem.children();
-            
+            console.dir("真是够了");
 
             button.bind("click",function(){ 
                var val = button.parent().parent().children("td").get(0).innerHTML;
