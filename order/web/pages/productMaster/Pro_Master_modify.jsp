@@ -51,10 +51,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="formControls col-xs-2">
                    <span class="select-box">
-                        <select class="select" size="1" style="width:150px;" name="customerMasterId" id="customerMasterId" placeholder="输入客户编号">
-                        <option value="" selected>请选择客户编号</option>
+                        <select class="select" size="1" style="width:150px;" name="customerMasterId" id="customerMasterId" placeholder="输入客户名称">
+                        <option value="" selected>请选择客户名称</option>
                             <c:forEach items="${customerMasterList}" var = "customerMaster">
-                                <option value="${customerMaster.customerMasterId}">${customerMaster.customerMasterId}</option>
+                                <option value="${customerMaster.customerMasterId}">${customerMaster.customerName}</option>
                             </c:forEach>
                         </select>
                     </span>

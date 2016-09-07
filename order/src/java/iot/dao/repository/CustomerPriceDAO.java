@@ -256,6 +256,8 @@ public class CustomerPriceDAO implements Serializable {
         
         //将查询条件加入查询主语句
         cq.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
+        
+        cq.orderBy(cb.asc(customerPrice.get(CustomerPrice_.customerMasterId)));
         //创建查询
         Query q = em.createQuery(cq);
         
