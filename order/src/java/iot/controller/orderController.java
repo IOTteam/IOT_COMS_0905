@@ -42,9 +42,9 @@ public class orderController {
     @RequestMapping(value = "detailQuery",method = RequestMethod.GET)
     public String getDetail(@RequestParam("orderId") String orderId,ModelMap model){
         List<OrderDetailInfo> orders = orderService.getDetails(orderId);
-        //int orderMasterId = orderService.getOrderMaster(orderId).getOrderMasterId();
-        //model.addAttribute("orderMasterId", orderMasterId);
-        //model.addAttribute("CustomerId",orderService.getOrderMaster(orderId).getCustomerId());
+        int orderMasterId = orderService.getOrderMaster(orderId).getOrderMasterId();
+        model.addAttribute("orderMasterId", orderMasterId);
+        model.addAttribute("CustomerId",orderService.getOrderMaster(orderId).getCustomerId());
 
         model.addAttribute("detailList", orders);
         return "orderDetail";

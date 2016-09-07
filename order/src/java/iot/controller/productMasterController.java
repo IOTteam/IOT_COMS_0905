@@ -5,7 +5,8 @@
  */
 package iot.controller;
 
-import iot.dao.repository.CustomerPriceImpl;
+import iot.common.Constants;
+import iot.dao.entity.AddCustomerPriceEntity;
 import iot.dao.entity.CustomerMaster;
 import iot.dao.entity.CustomerPrice;
 import iot.dao.entity.ProductMaster;
@@ -13,6 +14,7 @@ import iot.dao.repository.CustomerMasterDAO;
 import iot.dao.repository.CustomerPriceDAO;
 import iot.dao.repository.OrderDetailDAO;
 import iot.dao.repository.ProductMasterImpl;
+import iot.service.CustomerPriceService;
 import iot.service.ProductMasterService;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -27,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -40,14 +43,12 @@ public class productMasterController {
     
     @Autowired(required = false)
     private ProductMasterImpl productMasterImpl;
-    
-//    @Autowired(required = false)
-//    private OrderDetailDAO orderDetailDAO;
+   
     @Autowired
     private EntityManagerFactory emf;
     
     @Autowired(required = false)
-    private CustomerPriceImpl customerPriceImpl;
+    private CustomerPriceService customerPriceService;
     
     @RequestMapping(value = "loadProductMaster")
     public String loadProductMaster( Model model,ProductMaster productMaster){
@@ -65,7 +66,7 @@ public class productMasterController {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("orderPU");
         EntityManager em = emf.createEntityManager();
         /***根据不同条件拼接SQL语句***/
-        String sql = "SELECT p FROM ProductMaster p WHERE 1=1 and p.status = '1' ";//查询有效数据
+        String sql = "SELECT p FROM ProductMaster p WHERE 1=1 and p.status != '0' ";//查询有效数据
         if(!productId.equals("")){
             sql = sql +"and p.productId =:productId ";
         }
@@ -77,11 +78,11 @@ public class productMasterController {
         }
         /***如果将priceMin定义为Float类型，当productName以及productName做为联合查询条件时，为抛出异常**/
         if(priceMin.length() > 0){
-            sql = sql +"and p.productPrice > :priceMin ";
+            sql = sql +"and p.productPrice >= :priceMin ";
         }
         /***如果将priceMax定义为Float类型，当productName以及productName做为联合查询条件时，为抛出异常**/
         if(0 < priceMax.length()){
-            sql = sql +"and p.productPrice < :priceMax ";
+            sql = sql +"and p.productPrice <= :priceMax ";
         }
         Query query = em.createQuery(sql);//根据SQL查询数据库
         /****根据条件设置参数****/
@@ -120,42 +121,27 @@ public class productMasterController {
     }
     
     @RequestMapping(value = "addProductMaster",method = RequestMethod.POST)
-    public String addProductMaster(ProductMaster productMaster,@RequestParam("ranges") List<Integer> ranges,
-        @RequestParam("rangePrice") List<Float> rangePrice,ServletRequest request) throws Exception{
+    public String addProductMaster(ProductMaster productMaster,ServletRequest request) throws Exception{
         
-        productMaster.setStatus("1");//设置Status的值，表明新增的数据是有效的
         this.productMasterService.addproductMaster(productMaster);//通过调用productMasterService中的addproductMaster方法将数据保存到数据库
-        
-        CustomerMasterDAO customerMasterDAO = new CustomerMasterDAO(emf);//创建customerPriceDAO对象
-        List<CustomerMaster> customerMaster = customerMasterDAO.findCustomerMasterEntities();//创建customerMaster对象，并提取customerMaster表的全部数据
-        
-        CustomerPriceDAO customerPriceDAO = new CustomerPriceDAO(emf);//创建customerPriceDAO对象
-        List<CustomerPrice> cp = customerPriceDAO.findCustomerPriceEntities();//创建cp对象
-        Integer count = cp.size();//根据CustomerPriceId统计customerPrice表的数据总量
-        CustomerPrice customerPrice = new CustomerPrice();
-        int k = 0;
-        /**根据数据库的联系，当新增产品时，要增加的customerPrice数量共有customerName * ranges条，所以用了两个for循环**/
-        for(int i = 1; i < customerMaster.size()+1; i++){
-            for(int j = 1; j < 5; j++){
-                count = count + 1;
-                CustomerMaster customerMasterId = new CustomerMaster(customerMaster.get(i-1).getCustomerMasterId());//将Integer类型转换为CustomerMaster类
-                customerPrice.setCustomerMasterId(customerMasterId);//设置customerMasterId的值
-                ProductMaster productMasterId = new ProductMaster(productMaster.getProductMasterId());//将Integer类型转换为ProductMaster类
-                customerPrice.setProductMasterId(productMasterId);//设置productMasterId的值
-                customerPrice.setRangePrice(rangePrice.get(k));//设置相应的值
-                customerPrice.setRanges(ranges.get(j-1));//设置相应的值
-                customerPrice.setCustomerPriceId(count);//设置相应的值
-                customerPrice.setStatus(true);//将数据设置为有效
-                this.customerPriceImpl.save(customerPrice);
-//                customerPriceDAO.edit(customerPrice);//此方法运行有错误，暂未查出错误原因
-                k++;
-            }
+        if(productMaster.getStatus().equals(Constants.DATA_STATUS.ENABLED)){//判断产品有优惠的情况
+            CustomerPriceDAO customerPriceDAO = new CustomerPriceDAO(emf);
+            List<CustomerPrice> cp = customerPriceDAO.findCustomerPriceEntities();//创建cp对象
+            Integer count = cp.size();//根据CustomerPriceId统计customerPrice表的数据总量
+            this.customerPriceService.setNewCustomerPrice(productMaster, count);//调用setNewCustomerPrice方法，进行对customerPrice表的操作
         }
-//        productMasterDAO.save(productMaster);//通过调用productMasterDAO中的save方法将数据保存到数据库(两种方法都可行)
         
         return "redirect:/productMaster/loadProductMaster";
+        
     }
     
+    @RequestMapping(value = "setCustomerPrice",method = RequestMethod.POST)
+    @ResponseBody
+    public List<AddCustomerPriceEntity> setCustomerPrice(@RequestParam("proname") String proname,@RequestParam("ranges") Integer ranges,@RequestParam("customerMasterId") Integer customerMasterId,
+        @RequestParam("rangePrice") Float rangePrice) throws Exception{        
+        
+        return customerPriceService.setCustomerPrice(customerMasterId, ranges, rangePrice, proname);
+    }
     /**
      *
      * @param productId
@@ -165,8 +151,11 @@ public class productMasterController {
     @RequestMapping(value = "modifyProductMasterInit")
     public String modifyProductMasterInit(@RequestParam("productId") String productId,Model model){
 
+        CustomerMasterDAO customerMasterDAO = new CustomerMasterDAO(emf);//创建customerMasterDAO对象
+        List<CustomerMaster> customerMasterList = customerMasterDAO.findCustomerMasterEntities();//将CustomerMaster表作为一个List保存
         ProductMaster productMaster = this.productMasterService.findByProductId(productId);//根据productId查询相应的数据存入实体类对象productMaster中
         model.addAttribute("productMaster", productMaster);//将productMaster对象传入前端页面
+        model.addAttribute("customerMasterList", customerMasterList);//将customerMasterList提交到前台
         return "productMaster/Pro_Master_modify";//跳转到Pro_Master_modify页面
     }
     
@@ -188,7 +177,13 @@ public class productMasterController {
             e.printStackTrace();
         }
         this.productMasterService.modifyProductMaster(productMasterOld);//调用productMasterService的modifyProductMaster方法保存productMasterOld对象
-        
+        if(productMasterOld.getStatus().equals(Constants.DATA_STATUS.ENABLED)){//判断产品有优惠的情况
+            List<CustomerPrice> cp = customerPriceDAO.findCustomerPriceEntities();//创建cp对象
+            Integer count = cp.size();//根据CustomerPriceId统计customerPrice表的数据总量
+            this.customerPriceService.setNewCustomerPrice(productMasterOld, count);//调用setNewCustomerPrice方法，进行对customerPrice表的操作
+        }else if(productMasterOld.getStatus().equals(Constants.DATA_STATUS.DISCOUNT)){//判断产品无优惠的情况
+            this.customerPriceService.removeCustomerPrice(productMasterOld);//调用removeCustomerPrice方法
+        }
         return "redirect:/productMaster/loadProductMaster";
     }
     
