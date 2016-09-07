@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -197,8 +198,14 @@ public class ProductMasterDAO implements Serializable {
         try {
             Query query=em.createQuery("SELECT p FROM ProductMaster p WHERE p.productName LIKE :ProductName AND p.status=:flag");
             query.setParameter("ProductName", "%"+ProductName+"%");
-            query.setParameter("flag", true);
+            query.setParameter("flag", "1");
+            
+//            query.setMaxResults(MaxResults);
+//            query.setFirstResult(FirstResult);
+            
             return query.getResultList();
+        }catch(NoResultException exception){
+            return null;
         } finally {
             em.close();
         }

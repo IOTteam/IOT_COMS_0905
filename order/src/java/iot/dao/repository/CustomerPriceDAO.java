@@ -7,16 +7,26 @@ package iot.dao.repository;
 
 import iot.dao.entity.CustomerMaster;
 import iot.dao.entity.CustomerPrice;
+import iot.dao.entity.CustomerPrice_;
 import iot.dao.entity.ProductMaster;
+import iot.dao.entity.User;
 import iot.dao.repository.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 /**
  *
@@ -191,9 +201,89 @@ public class CustomerPriceDAO implements Serializable {
 
     }
 
-    //对查询结果分页
-    
-    
+    //客户产品单价表条件查询
+    public Map findCustomerPricesByCondition(List<CustomerMaster> CustomerMasterList, List<ProductMaster> ProductMasterList, 
+                                                                String PriceMin, String PriceMax, String RangesMin, String RangesMax ,
+                                                                int MaxResults, int FirstResult){
+        EntityManager em = getEntityManager(); 
+        try { 
+        //创建安全查询工厂
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        //创建查询主语句
+        CriteriaQuery<CustomerPrice> cq = cb.createQuery(CustomerPrice.class);
+        //数量查询语句
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        //定义实体类型
+        Root<CustomerPrice> customerPrice = cq.from(CustomerPrice.class);
+        //创建计数主语句
+        countQuery.select(cb.count(customerPrice));
+        
+        //构造过滤条件
+        List<Predicate> predicatesList = new ArrayList<Predicate>();
+        
+        Predicate customer = cb.or();
+        for(int m = 0;m < CustomerMasterList.size();m++){
+            //循环加入查询条件customerMasterId
+            customer = cb.or(customer,cb.equal(customerPrice.get(CustomerPrice_.customerMasterId), CustomerMasterList.get(m)));
+        }
+        predicatesList.add(customer);
+        
+        Predicate product = cb.or();
+        for(int n = 0;n < ProductMasterList.size();n++){
+            //循环加入查询条件productMasterId
+            product = cb.or(product,cb.equal(customerPrice.get(CustomerPrice_.productMasterId), ProductMasterList.get(n)));
+        }
+        predicatesList.add(product);
+        
+        if(PriceMin.length() > 0){
+            //添加查询条件，rangePrice > PriceMin
+            predicatesList.add(cb.gt(customerPrice.get(CustomerPrice_.rangePrice), Float.parseFloat(PriceMin)));
+        }
+        if(PriceMax.length() > 0){
+            //添加查询条件，rangePrice < PriceMax
+            predicatesList.add(cb.lt(customerPrice.get(CustomerPrice_.rangePrice), Float.parseFloat(PriceMax)));
+        }
+        if(RangesMin.length() > 0){
+            //添加查询条件，ranges > RangesMin
+            predicatesList.add(cb.gt(customerPrice.get(CustomerPrice_.ranges), Integer.parseInt(RangesMin)));
+        }
+        if(RangesMax.length() > 0){
+            //添加查询条件，ranges < RangesMax
+            predicatesList.add(cb.lt(customerPrice.get(CustomerPrice_.ranges), Integer.parseInt(RangesMax)));
+        }
+        //添加查询条件，未被逻辑删除
+        predicatesList.add(cb.equal(customerPrice.get(CustomerPrice_.status), true));
+        
+        //将查询条件加入查询主语句
+        cq.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
+        //创建查询
+        Query q = em.createQuery(cq);
+        
+        //查询分页
+        q.setMaxResults(MaxResults);
+        q.setFirstResult(FirstResult);
+        //取得查询结果
+        List<CustomerPrice> customerPricesList = q.getResultList();
+        
+        //查询数据总量
+        countQuery.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
+        Query count = em.createQuery(countQuery);
+        Long count_Long = (Long)count.getSingleResult();
+        
+        //使用Map保存数据
+        Map map = new HashMap();
+        map.put("customerPricesList", customerPricesList);
+        map.put("count", count_Long);
+        
+        //返回结果
+        return map;
+            
+        } catch (NoResultException e) {
+            //无查询结果返回null
+            return null;
+        }
+
+    }
     
     public int getCustomerPriceCount() {
         EntityManager em = getEntityManager();

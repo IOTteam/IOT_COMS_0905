@@ -108,13 +108,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </tr>
             <c:forEach items="${custPriceList}" var ="custPrice">
                 <tr style="height: 50px" class="CusPrice" >
-                    <td hidden="true" style="width:100px"><c:out value="${custPrice[0]}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice[1]}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice[2]}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice[3]}"></c:out></td> 
-                    <td style="width:100px"><c:out value="${custPrice[4]}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice[5]}"></c:out></td>
-                    <td style="width:100px"><c:out value="${custPrice[6]}"></c:out></td>
+                    <td hidden="true" style="width:100px"><c:out value="${custPrice.customerPriceId}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerId}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.customerMasterId.customerName}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productId}"></c:out></td> 
+                    <td style="width:100px"><c:out value="${custPrice.productMasterId.productName}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.ranges}"></c:out></td>
+                    <td style="width:100px"><c:out value="${custPrice.rangePrice}"></c:out></td>
                     <td>
                     <input class="btn btn-primary radius" type="button" name="edit" value="修改" style="display: inline-block;" />
                     </td>
@@ -130,7 +130,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <input class="btn btn-primary radius" type="button" value="下一页" onclick="next()"/></p>
     </div>
     </div>
-    <div class="footer">IOT TEAM</div>
    </section>
 
 <script type="text/javascript" src="<%=basePath%>pages/lib/jquery/1.9.1/jquery.min.js"></script> 

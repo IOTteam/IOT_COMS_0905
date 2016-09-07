@@ -214,7 +214,13 @@ public class CustomerMasterDAO implements Serializable {
             Query query = em.createQuery("SELECT c FROM CustomerMaster c WHERE c.customerName LIKE :CustomerName AND c.status=:flag");
             query.setParameter("CustomerName", "%" + CustomerName + "%");
             query.setParameter("flag", true);
+            
+//            query.setMaxResults(MaxResults);
+//            query.setFirstResult(FirstResult);
+            
             return query.getResultList();
+        }catch(NoResultException exception){
+            return null;
         } finally {
             em.close();
         }

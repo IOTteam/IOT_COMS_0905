@@ -8,8 +8,10 @@ package iot.controller;
 import iot.dao.entity.CustomerPrice;
 import iot.dao.repository.CustomerPriceDAO;
 import iot.service.CustomerPriceService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,16 +51,18 @@ public class customerPriceController {
         queryCondition.put("RangesMin", "");
         queryCondition.put("RangesMax", "");
         
-        //分页查询，并将结果保存到一个Map中
-        HashMap hashMap = cps.divPage("", "", "", "", "", "",0);
+        Map map = cps.queryCustomerPrice("", "", "", "", "", "", 0);
+        
+        List<CustomerPrice> cpList = (List<CustomerPrice>)map.get("customerPricesList");
+        int count = (int) ((Long)map.get("count")/10 + 1);
         
         //将查询条件保存到Session当中
         model.addAttribute("queryCondition",queryCondition); 
         
         //将当前页、总页及查询数据数传到视图中
         model.addAttribute("pageNo","1");
-        model.addAttribute("totalPage",hashMap.get("totalPage"));
-        model.addAttribute("custPriceList", hashMap.get("cpList"));
+        model.addAttribute("custPriceList", cpList);
+        model.addAttribute("totalPage",count);
         
         //返回视图
         return "custPriceInfo";
@@ -67,7 +71,7 @@ public class customerPriceController {
     //客户产品单价条件查询
     @RequestMapping(value = "CustQuery", method = RequestMethod.POST)
     public String queryCustomerPrice(@RequestParam("customerName") String CustomerName, @RequestParam("productName") String ProductName, @RequestParam("priceMin") String PriceMin,
-            @RequestParam("priceMax") String PriceMax, @RequestParam("rangesMin") String RangesMin, @RequestParam("rangesMax") String RangesMax, ModelMap modelMap) {
+            @RequestParam("priceMax") String PriceMax, @RequestParam("rangesMin") String RangesMin, @RequestParam("rangesMax") String RangesMax, ModelMap model) {
 
         //将查询条件保存到一个Map中 
         HashMap<String,String> queryCondition = new HashMap<String, String>();
@@ -78,20 +82,76 @@ public class customerPriceController {
         queryCondition.put("RangesMin", RangesMin);
         queryCondition.put("RangesMax", RangesMax);
         
-        //分页查询，并将结果保存到一个Map中
-        HashMap hashMap = cps.divPage(CustomerName, ProductName, PriceMin, PriceMax, RangesMin, RangesMax,0);
+        Map map = cps.queryCustomerPrice(CustomerName, ProductName, PriceMin, PriceMax, RangesMin, RangesMax,0);
         
+        List<CustomerPrice> cpList = (List<CustomerPrice>)map.get("customerPricesList");
+        int count = (int) ((Long)map.get("count")/10 + 1);
+       
         //将查询条件、当前页、总页及查询数据数传到视图中
-        modelMap.addAttribute("queryCondition",queryCondition); 
-        modelMap.addAttribute("pageNo","1");
-        modelMap.addAttribute("totalPage",hashMap.get("totalPage"));
-        modelMap.addAttribute("custPriceList", hashMap.get("cpList"));
+        model.addAttribute("queryCondition",queryCondition); 
+        model.addAttribute("pageNo","1");
+        model.addAttribute("custPriceList", cpList);
+        model.addAttribute("totalPage",count);
         
         //返回视图
         return "custPriceInfo";
 
     }
 
+    //查询下一页
+    @RequestMapping(value = "queryNext", method = RequestMethod.GET)
+    @ResponseBody            //将数据转换为合适的格式（Json）
+    public List nextPage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo, ModelMap model) {
+
+         List<CustomerPrice> cpList = (List<CustomerPrice>)cps.queryCustomerPrice(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
+                                      queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo).get("customerPricesList");
+        
+         List list_table = new ArrayList();
+         //将查询结果保存在List中
+         for(int i = 0;i < cpList.size();i++){
+         
+             List list_row = new ArrayList();
+             list_row.add(cpList.get(i).getCustomerPriceId());
+             list_row.add(cpList.get(i).getCustomerMasterId().getCustomerId());
+             list_row.add(cpList.get(i).getCustomerMasterId().getCustomerName());
+             list_row.add(cpList.get(i).getProductMasterId().getProductId());
+             list_row.add(cpList.get(i).getProductMasterId().getProductName());
+             list_row.add(cpList.get(i).getRanges());
+             list_row.add(cpList.get(i).getRangePrice());
+             list_table.add(list_row);
+         }
+         
+        //将数据传回前台
+        return list_table;
+    }
+
+    //查询上一页
+    @RequestMapping(value = "queryPre", method = RequestMethod.GET)
+    @ResponseBody            //将数据转换为合适的格式（Json）
+    public List prePage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo,ModelMap model) {
+
+        List<CustomerPrice> cpList = (List<CustomerPrice>)cps.queryCustomerPrice(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
+                                      queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo - 2).get("customerPricesList");
+        
+         List list_table = new ArrayList();
+         //将查询结果保存在List中
+         for(int i = 0;i < cpList.size();i++){
+         
+             List list_row = new ArrayList();
+             list_row.add(cpList.get(i).getCustomerPriceId());
+             list_row.add(cpList.get(i).getCustomerMasterId().getCustomerId());
+             list_row.add(cpList.get(i).getCustomerMasterId().getCustomerName());
+             list_row.add(cpList.get(i).getProductMasterId().getProductId());
+             list_row.add(cpList.get(i).getProductMasterId().getProductName());
+             list_row.add(cpList.get(i).getRanges());
+             list_row.add(cpList.get(i).getRangePrice());
+             list_table.add(list_row);
+         }
+         
+        //将数据传回前台
+        return list_table;
+    }
+    
     //跳转修改客户产品单价信息
     @RequestMapping(value = "CustPriceEdit", method = RequestMethod.GET)
     public String editCustPricePage(@RequestParam("customerPriceId") int CustomerPriceId, ModelMap model) {
@@ -124,32 +184,6 @@ public class customerPriceController {
         cp.setRangePrice(Float.parseFloat(EditPrice));//把前台获取到的EditPrice保存到某个位置
         cpdao.edit(cp);
         return "custPriceEdit";
-    }
-
-    //查询下一页
-    @RequestMapping(value = "queryNext", method = RequestMethod.GET)
-    @ResponseBody            //将数据转换为合适的格式（Json）
-    public List nextPage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo, ModelMap model) {
-
-        //将查询结果保存在List中
-        List cpList = (List) cps.divPage(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
-                    queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo).get("cpList");
-        
-        //将数据传回前台
-        return cpList;
-    }
-
-    //查询上一页
-    @RequestMapping(value = "queryPre", method = RequestMethod.GET)
-    @ResponseBody            //将数据转换为合适的格式（Json）
-    public List prePage(@ModelAttribute("queryCondition") HashMap<String,String> queryCondition,@RequestParam("pageNo") int pageNo,ModelMap model) {
-
-        //将查询结果保存在List中
-        List cpList = (List) cps.divPage(queryCondition.get("CustomerName"), queryCondition.get("ProductName"),queryCondition.get("PriceMin") , 
-                    queryCondition.get("PriceMax"), queryCondition.get("RangesMin"), queryCondition.get("RangesMax"),pageNo-2).get("cpList");
-        
-        //传回数据
-        return cpList;
     }
 
 }

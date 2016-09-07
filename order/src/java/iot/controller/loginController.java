@@ -53,11 +53,11 @@ public class loginController {
         HttpSession session = request.getSession();  
         String code = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY); 
         
-        if (!code.equals(kaptcha)) {
-            
-            model.addAttribute("message_k", "验证码错误");
-            return "login";
-        }
+//        if (!code.equals(kaptcha)) {
+//            
+//            model.addAttribute("message_k", "验证码错误");
+//            return "login";
+//        }
         
         UserDaoImpl udi = new UserDaoImpl();
         User user = udi.getUserByNameAndPassword(username,password);
